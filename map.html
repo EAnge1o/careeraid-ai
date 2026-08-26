@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="static/favicon.svg" />
+    <title>岗位图谱 - 智业AI职业规划助手</title>
+    <link rel="stylesheet" href="static/style.css" />
+    <script src="static/echarts.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="topbar">
+        <a href="job.html" class="btn" style="background: #2563eb; color: #000; display: flex; align-items: center; gap: 8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          返回
+        </a>
+        <div class="brand">
+          <div class="title" style="font-size: 24px; font-weight: 700;">岗位图谱</div>
+          <div class="subtitle">垂直晋升路径 + 横向换岗路径</div>
+        </div>
+      </div>
+
+      <div class="grid" style="margin-top: 24px; grid-template-columns: 320px 1fr;">
+        <div class="card">
+          <h2>图谱生成</h2>
+          <div class="form">
+            <div>
+              <label>目标岗位（可选，不填则根据 TOP1 匹配自动推断）</label>
+              <input id="target" placeholder="例如：数据分析实习生 / 后端开发工程师 / 前端开发工程师" />
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button class="btn primary" id="gen">生成图谱</button>
+              <a class="btn" href="match.html">先看匹配结果</a>
+            </div>
+            <div class="hint" id="msg"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 id="graphTitle">职业路径图谱</h2>
+          <div class="hint">点击节点可查看提示；图谱为可视化示例，企业数据集接入后可由真实岗位关系生成。</div>
+          <div class="hr"></div>
+          <div id="graph" style="height:420px"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="static/app.js"></script>
+    <script>
+      CareerAid.mountTopbar("map");
+      if (!CareerAid.requireAuth()) throw new Error("not authed");
+
+      const msg = CareerAid.qs("msg");
+      const chart = echarts.init(document.getElementById("graph"));
+
+      function buildGraph(title) {
+        const t = (title || "").toLowerCase();
+        let vertical = [];
+        let lateral = [];
+
+        if (t.includes("数据") || t.includes("analysis")) {
+          vertical = ["数据分析实习生", "数据分析师", "高级数据分析师", "数据科学家/算法", "数据负责人"];
+          lateral = ["增长分析", "商业分析", "产品分析", "运营分析", "数据产品经理"];
+        } else if (t.includes("后端") || t.includes("backend") || t.includes("flask") || t.includes("java")) {
+          vertical = ["后端实习生", "后端工程师", "高级后端工程师", "架构师", "技术负责人"];
+          lateral = ["DevOps", "全栈工程师", "SRE", "数据工程", "安全工程师"];
+        } else if (t.includes("前端") || t.includes("frontend") || t.includes("react") || t.includes("vue")) {
+          vertical = ["前端实习生", "前端工程师", "高级前端工程师", "前端负责人", "技术负责人"];
+          lateral = ["全栈工程师", "客户端工程师", "可视化工程师", "交互/体验", "低代码平台"];
+        } else if (t.includes("产品") || t.includes("pm")) {
+          vertical = ["产品助理", "产品经理", "高级产品经理", "产品负责人", "业务负责人"];
+          lateral = ["用户研究", "增长运营", "项目管理", "商业分析", "解决方案顾问"];
+        } else if (t.includes("算法") || t.includes("nlp") || t.includes("llm")) {
+          vertical = ["算法实习生", "算法工程师", "高级算法工程师", "算法负责人", "技术专家"];
+          lateral = ["MLOps", "数据工程", "搜索/推荐", "语音/多模态", "应用产品(AI)"];
+        } else {
+          vertical = ["实习生", title || "目标岗位", "中级岗位", "高级岗位", "负责人/专家"];
+          lateral = ["相近岗位A", "相近岗位B", "相近岗位C", "相近岗位D", "相近岗位E"];
+        }
+
+        const nodes = [];
+        const links = [];
+        const addNode = (name, cat) => nodes.push({ id: name, name, category: cat, symbolSize: cat === 0 ? 46 : 40 });
+
+        vertical.forEach((n, i) => addNode(n, 0));
+        lateral.forEach((n) => addNode(n, 1));
+
+        for (let i = 0; i < vertical.length - 1; i++) {
+          links.push({ source: vertical[i], target: vertical[i + 1] });
+        }
+        // 横向连接到中间节点
+        const pivot = vertical[Math.min(2, vertical.length - 1)];
+        lateral.forEach((n) => links.push({ source: pivot, target: n, lineStyle: { type: "dashed" } }));
+
+        return { nodes, links, pivot };
+      }
+
+      async function inferTop1Title() {
+        try {
+          const m = await CareerAid.apiFetch("/match_jobs", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ goal: "" }),
+          });
+          const top = (m.matches || [])[0];
+          return top ? top.job_title : "";
+        } catch {
+          return "";
+        }
+      }
+
+      async function render() {
+        msg.textContent = "生成中...";
+        let title = CareerAid.qs("target").value.trim();
+        if (!title) title = await inferTop1Title();
+        if (!title) title = "通用职业路径";
+
+        let g = { nodes: [], links: [], pivot: null };
+        try {
+          const res = await CareerAid.apiFetch("/career_graph?title=" + encodeURIComponent(title));
+          if (res.ok !== false && res.graph && res.graph.nodes && res.graph.nodes.length) {
+            g = res.graph;
+          } else {
+            g = buildGraph(title);
+          }
+        } catch (e) {
+          g = buildGraph(title);
+        }
+        const nodes = g.nodes || [];
+        const links = g.links || [];
+        chart.setOption({
+          backgroundColor: "transparent",
+          tooltip: {
+            backgroundColor: "#2563eb",
+            borderColor: "#000",
+            borderWidth: 3,
+            textStyle: { color: "#000", fontWeight: 600 },
+            padding: [12, 16],
+            borderRadius: 8
+          },
+          legend: [{ 
+            data: ["垂直晋升", "横向迁移"], 
+            textStyle: { color: "#000", fontWeight: 700, fontSize: 13 },
+            itemGap: 20,
+            itemWidth: 16,
+            itemHeight: 16
+          }],
+          series: [
+            {
+              type: "graph",
+              layout: "force",
+              roam: true,
+              draggable: true,
+              force: { 
+                repulsion: 500, 
+                edgeLength: [150, 200],
+                gravity: 0.05,
+                friction: 0.4
+              },
+              data: nodes.map(node => ({
+                ...node,
+                symbolSize: node.category === 0 ? 55 : 45,
+                itemStyle: {
+                  color: node.category === 0 ? "#2563eb" : "#eef4ff",
+                  borderColor: "#000",
+                  borderWidth: 3,
+                  shadowColor: "#000",
+                  shadowBlur: 0,
+                  shadowOffsetX: 4,
+                  shadowOffsetY: 4
+                },
+                lineStyle: {
+                  color: "#000",
+                  width: 3
+                }
+              })),
+              links: links.map(link => ({
+                ...link,
+                lineStyle: {
+                  color: "#000",
+                  width: 3,
+                  curveness: link.lineStyle?.type === "dashed" ? 0.3 : 0,
+                  type: link.lineStyle?.type || "solid"
+                }
+              })),
+              categories: [
+                { name: "垂直晋升", itemStyle: { color: "#2563eb" } },
+                { name: "横向迁移", itemStyle: { color: "#eef4ff" } },
+              ],
+              label: { 
+                show: true, 
+                color: "#000", 
+                fontWeight: 700,
+                fontSize: 12,
+                position: "bottom",
+                distance: 8
+              },
+              edgeSymbol: ["none", "arrow"],
+              edgeSymbolSize: [0, 12],
+              edgeLabel: {
+                show: false
+              },
+              emphasis: {
+                focus: "adjacency",
+                lineStyle: {
+                  width: 4,
+                  color: "#1d4ed8"
+                },
+                itemStyle: {
+                  shadowBlur: 0,
+                  shadowOffsetX: 6,
+                  shadowOffsetY: 6
+                }
+              },
+              animationDuration: 1500,
+              animationEasing: "elasticOut",
+              animationDurationUpdate: 800,
+              animationEasingUpdate: "cubicOut"
+            },
+          ],
+        });
+        msg.textContent = "已生成（参考岗位：" + title + (g.family ? "，岗位族：" + g.family : "") + "）";
+        
+        // 更新图谱标题为当前岗位名称
+        CareerAid.qs("graphTitle").textContent = title;
+      }
+
+      CareerAid.qs("gen").addEventListener("click", render);
+      render();
+    </script>
+  </body>
+</html>
+

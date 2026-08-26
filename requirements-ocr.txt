@@ -1,0 +1,7 @@
+# 可选：OCR 简历图片识别（体积大，默认不安装）
+# pip install -r requirements-ocr.txt
+# 安装后取消 routes.py 中 PaddleOCR 相关注释即可启用
+paddlepaddle>=3.0.0
+paddleocr>=2.8.0
+opencv-python>=4.10.0
+PyMuPDF>=1.24.0

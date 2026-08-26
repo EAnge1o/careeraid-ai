@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="static/favicon.svg" />
+    <title>性格测评 - CareerAid AI</title>
+    <link rel="stylesheet" href="static/style.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- 侧边栏 -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="logo">CareerAid AI</div>
+          <div class="tagline">你的专属AI职业规划助手</div>
+        </div>
+        
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <div class="nav-section-title">核心功能</div>
+            <a class="nav-item" href="upload.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              简历解析
+            </a>
+            <a class="nav-item active" href="test.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              性格测评
+            </a>
+            <a class="nav-item" href="match.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              人岗匹配
+            </a>
+            <a class="nav-item" href="report.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              报告生成
+            </a>
+          </div>
+          
+          <div class="nav-section">
+            <div class="nav-section-title">更多</div>
+            <a class="nav-item" href="chat.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              AI对话
+            </a>
+            <a class="nav-item" href="job.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              提升规划
+            </a>
+            <a class="nav-item" href="admin.html" id="adminLink" style="display: none;">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              管理员后台
+            </a>
+          </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+          <div class="user-info" id="userInfo" style="display:none">
+            <div class="user-avatar">U</div>
+            <div class="user-meta">
+              <div class="user-name" id="userName">用户</div>
+              <div class="user-role">学生</div>
+            </div>
+          </div>
+          <a href="login.html" class="btn btn-primary" style="width:100%;margin-top:12px" id="loginBtn">立即登录</a>
+          <button class="btn btn-danger" style="width:100%;margin-top:12px;display:none" id="logoutBtn">退出登录</button>
+        </div>
+      </aside>
+
+      <!-- 主内容区 -->
+      <main class="main-content">
+        <header class="topbar">
+          <button class="menu-toggle" id="menuToggle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <h1 class="topbar-title">性格测评</h1>
+          <div class="topbar-actions">
+            <span class="badge badge-secondary">Big Five 简版</span>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <!-- 上下布局 -->
+          <div class="vertical-layout">
+            <!-- 上方：测评结果 -->
+            <div class="card" id="resultsCard" style="display:none">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title">测评结果</h2>
+                  <p class="card-subtitle">五维人格画像</p>
+                </div>
+                <!-- 独特插画 - 五维人格雷达 -->
+                <svg width="80" height="80" viewBox="0 0 80 80" class="illustration" style="opacity: 0.9;">
+                  <!-- 五边形雷达图轮廓 -->
+                  <polygon points="40,10 65,25 60,55 20,55 15,25" stroke="var(--primary)" stroke-width="2" fill="var(--primary-light)"/>
+                  <polygon points="40,20 55,30 50,45 30,45 25,30" stroke="#000" stroke-width="1" fill="var(--primary)" fill-opacity="0.3"/>
+                  <!-- 五个维度点 -->
+                  <circle cx="40" cy="10" r="3" fill="var(--primary)" stroke="#000" stroke-width="1"/>
+                  <circle cx="65" cy="25" r="3" fill="var(--primary)" stroke="#000" stroke-width="1"/>
+                  <circle cx="60" cy="55" r="3" fill="var(--primary)" stroke="#000" stroke-width="1"/>
+                  <circle cx="20" cy="55" r="3" fill="var(--primary)" stroke="#000" stroke-width="1"/>
+                  <circle cx="15" cy="25" r="3" fill="var(--primary)" stroke="#000" stroke-width="1"/>
+                  <!-- 中心点 -->
+                  <circle cx="40" cy="38" r="4" fill="#000"/>
+                </svg>
+              </div>
+              
+              <div class="form-hint">提交后会保存到 <code>students.personality_test_json</code></div>
+              <div class="hr"></div>
+              
+              <!-- 空状态 - 独特插画 -->
+              <div id="emptyState" style="text-align:center;padding:40px 20px">
+                <svg width="140" height="120" viewBox="0 0 140 120" class="illustration" style="margin-bottom:16px;opacity: 0.9;">
+                  <!-- 大脑轮廓 -->
+                  <ellipse cx="70" cy="50" rx="45" ry="35" stroke="var(--primary)" stroke-width="3" fill="var(--primary-light)"/>
+                  <!-- 大脑褶皱 -->
+                  <path d="M35,40 Q50,30 65,40" stroke="#000" stroke-width="2" fill="none"/>
+                  <path d="M40,55 Q55,45 70,55" stroke="#000" stroke-width="2" fill="none"/>
+                  <path d="M50,70 Q65,60 80,70" stroke="#000" stroke-width="2" fill="none"/>
+                  <path d="M75,35 Q90,25 100,35" stroke="#000" stroke-width="2" fill="none"/>
+                  <path d="M85,50 Q100,40 110,50" stroke="#000" stroke-width="2" fill="none"/>
+                  <!-- 五维指示器 -->
+                  <circle cx="30" cy="30" r="6" fill="var(--primary)" stroke="#000" stroke-width="2"/>
+                  <circle cx="110" cy="30" r="6" fill="var(--primary)" stroke="#000" stroke-width="2"/>
+                  <circle cx="115" cy="65" r="6" fill="var(--primary)" stroke="#000" stroke-width="2"/>
+                  <circle cx="70" cy="95" r="6" fill="var(--primary)" stroke="#000" stroke-width="2"/>
+                  <circle cx="25" cy="65" r="6" fill="var(--primary)" stroke="#000" stroke-width="2"/>
+                  <!-- 问号 -->
+                  <text x="65" y="58" font-family="sans-serif" font-size="24" font-weight="bold" fill="#000">?</text>
+                </svg>
+                <div style="color:var(--text);font-size:14px;font-weight:700">完成测评后将在此显示结果</div>
+                <div style="color:var(--text-muted);font-size:12px;margin-top:8px">五维人格画像 · 职业建议</div>
+              </div>
+              
+              <!-- 雷达图容器 -->
+              <div id="radarChart" style="display:none;margin-bottom:20px;text-align:center"></div>
+              
+              <pre class="mono" id="out" style="white-space:pre-wrap;word-break:break-word;margin:0;display:none"></pre>
+            </div>
+
+            <!-- 下方：测评题目 -->
+            <div class="card card-featured" style="margin-top:32px">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title">测评题目</h2>
+                  <p class="card-subtitle">Big Five 人格量表（简版20题）</p>
+                </div>
+              </div>
+              
+              <div class="form-hint" style="margin-bottom:20px">
+                请选择每题的符合程度（1-5）。这是一个简版量表：会给出 5 个维度分数与画像标签，并用于后续匹配与报告建议。
+              </div>
+              
+              <form class="form" id="form">
+                <div id="questions" class="list"></div>
+                
+                <div class="hr"></div>
+                
+
+
+                <div class="card" style="margin-bottom:20px;padding:16px">
+                  <div style="font-weight:700;margin-bottom:12px">职业兴趣（勾选 + 兴趣程度）</div>
+                  <div id="careerInterest" class="list"></div>
+                </div>
+
+                <div class="card" style="margin-bottom:20px;padding:16px">
+                  <div style="font-weight:700;margin-bottom:12px">可利用资源（勾选）</div>
+                  <div id="resources" class="list"></div>
+                  <div style="margin-top:10px">
+                    <input type="text" id="resourceOther" placeholder="其他资源（如导师、内推人）" style="width:100%;max-width:360px;padding:10px;border:2px solid var(--border);border-radius:var(--radius-md);font-size:14px" />
+                  </div>
+                </div>
+
+                <div class="card" style="margin-bottom:20px;padding:16px">
+                  <div style="font-weight:700;margin-bottom:16px">约束条件（影响路径选择）</div>
+                  
+                  <div class="form-group" style="margin-bottom:20px;padding:16px;border:2px solid var(--border);border-radius:var(--radius-md);background:#f9fafb">
+                    <label style="font-size:13px;color:var(--text-muted);font-weight:600;margin-bottom:12px;display:block">城市/地域偏好</label>
+                    <div style="display:flex;flex-wrap:wrap;gap:12px">
+                      <label class="radio-button" style="padding:10px 16px;border:2px solid var(--border);border-radius:var(--radius-md);background:white;cursor:pointer;transition:all 0.2s ease;">
+                        <input type="radio" name="cityPref" value="first_tier" style="display:none" /> 
+                        <span>更希望一线城市/北上广深</span>
+                      </label>
+                      <label class="radio-button" style="padding:10px 16px;border:2px solid var(--border);border-radius:var(--radius-md);background:white;cursor:pointer;transition:all 0.2s ease;">
+                        <input type="radio" name="cityPref" value="new_first" style="display:none" /> 
+                        <span>新一线/省会城市也可以</span>
+                      </label>
+                      <label class="radio-button" style="padding:10px 16px;border:2px solid var(--border);border-radius:var(--radius-md);background:white;cursor:pointer;transition:all 0.2s ease;">
+                        <input type="radio" name="cityPref" value="hometown" style="display:none" /> 
+                        <span>更偏向家乡或离家近</span>
+                      </label>
+                      <label class="radio-button" style="padding:10px 16px;border:2px solid var(--border);border-radius:var(--radius-md);background:white;cursor:pointer;transition:all 0.2s ease;">
+                        <input type="radio" name="cityPref" value="specific" style="display:none" /> 
+                        <span>特定城市</span>
+                      </label>
+                    </div>
+                    <div style="margin-top:12px">
+                      <input type="text" id="specificCity" placeholder="请输入向往的城市地区（例如：杭州、成都等）" style="width:100%;padding:10px;border:2px solid var(--border);border-radius:var(--radius-md);font-size:14px;display:none" />
+                    </div>
+                  </div>
+                  
+                  <div class="form-group" style="margin-bottom:20px;padding:16px;border:2px solid var(--border);border-radius:var(--radius-md);background:#f9fafb">
+                    <label style="font-size:13px;color:var(--text-muted);font-weight:600;margin-bottom:12px;display:block">经济承受能力</label>
+                    <div style="display:flex;flex-wrap:wrap;gap:12px">
+                      <label class="radio-button" style="padding:10px 16px;border:2px solid var(--border);border-radius:var(--radius-md);background:white;cursor:pointer;transition:all 0.2s ease;">
+                        <input type="radio" name="econRisk" value="can_low_salary" style="display:none" /> 
+                        <span>可接受前 1-2 年薪资一般，换成长空间</span>
+                      </label>
+                      <label class="radio-button" style="padding:10px 16px;border:2px solid var(--border);border-radius:var(--radius-md);background:white;cursor:pointer;transition:all 0.2s ease;">
+                        <input type="radio" name="econRisk" value="need_stable" style="display:none" /> 
+                        <span>需要尽快有稳定收入，尽量少折腾</span>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group" style="padding:16px;border:2px solid var(--border);border-radius:var(--radius-md);background:#f9fafb">
+                    <label style="font-size:13px;color:var(--text-muted);font-weight:600;margin-bottom:12px;display:block">时间精力与作息</label>
+                    <div style="display:flex;flex-wrap:wrap;gap:12px">
+                      <label class="radio-button" style="padding:10px 16px;border:2px solid var(--border);border-radius:var(--radius-md);background:white;cursor:pointer;transition:all 0.2s ease;">
+                        <input type="radio" name="workStyle" value="can_overtime" style="display:none" /> 
+                        <span>可以接受较高强度加班，短期冲刺</span>
+                      </label>
+                      <label class="radio-button" style="padding:10px 16px;border:2px solid var(--border);border-radius:var(--radius-md);background:white;cursor:pointer;transition:all 0.2s ease;">
+                        <input type="radio" name="workStyle" value="need_regular" style="display:none" /> 
+                        <span>更希望作息规律，避免长期高压</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>补充说明（可选）</label>
+                  <textarea id="note" placeholder="例如：成绩较好但偏内向；更希望去某个行业/城市" rows="3"></textarea>
+                </div>
+
+                <div style="display:flex;gap:12px;flex-wrap:wrap">
+                  <button class="btn btn-primary" type="submit">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    提交测评
+                  </button>
+                  <a class="btn" href="chat.html">返回对话</a>
+                </div>
+                <div class="form-hint" id="msg"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="static/app.js"></script>
+    <script>
+      // 检查登录状态
+      const token = CareerAid.getToken();
+      const userInfo = document.getElementById('userInfo');
+      const loginBtn = document.getElementById('loginBtn');
+      const logoutBtn = document.getElementById('logoutBtn');
+      
+      if (token) {
+        userInfo.style.display = 'flex';
+        loginBtn.style.display = 'none';
+        logoutBtn.style.display = 'block';
+        // 加载用户信息
+      CareerAid.apiFetch('/me').then(data => {
+        const s = data.student || {};
+        document.getElementById('userName').textContent = s.username || '用户';
+        document.querySelector('.user-avatar').textContent = (s.username || 'U')[0].toUpperCase();
+        
+        // 显示管理员后台链接
+        if (s.username === 'admin') {
+          document.getElementById('adminLink').style.display = 'block';
+        }
+      }).catch(() => {});
+      }
+      
+      // 退出登录
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        CareerAid.logout();
+      });
+      
+      // 移动端菜单
+      document.getElementById('menuToggle').addEventListener('click', () => {
+        document.querySelector('.sidebar').classList.toggle('open');
+      });
+
+      const msg = document.getElementById('msg');
+      const out = document.getElementById('out');
+      const questionsEl = document.getElementById('questions');
+      const emptyState = document.getElementById('emptyState');
+
+      const CAREER_OPTIONS = [
+        { id: "java", name: "Java 开发" },
+        { id: "frontend", name: "前端开发" },
+        { id: "ai", name: "AI/算法" },
+        { id: "data", name: "大数据" },
+        { id: "test", name: "测试开发" },
+        { id: "product", name: "产品经理" },
+        { id: "pm", name: "项目管理" },
+      ];
+      const RESOURCE_OPTIONS = [
+        { id: "family", name: "家庭行业资源" },
+        { id: "mentor", name: "校内导师" },
+        { id: "referral", name: "实习内推" },
+      ];
+
+      const SCALE = [
+        { v: 1, t: "1" },
+        { v: 2, t: "2" },
+        { v: 3, t: "3" },
+        { v: 4, t: "4" },
+        { v: 5, t: "5" },
+      ];
+
+      // Big Five（简版 20 题）：每个维度 4 题，含反向题
+      const QUESTIONS = [
+        { id: "q01", dim: "E", rev: false, text: "我喜欢在团队中与人互动、结识新朋友。" },
+        { id: "q02", dim: "A", rev: false, text: "我愿意体谅他人感受，并尽量避免冲突。" },
+        { id: "q03", dim: "C", rev: false, text: "我做事有计划，能按时完成任务。" },
+        { id: "q04", dim: "N", rev: false, text: "我会因为压力或担忧而影响情绪与专注。" },
+        { id: "q05", dim: "O", rev: false, text: "我乐于尝试新事物，喜欢探索不同领域。" },
+
+        { id: "q06", dim: "E", rev: true, text: "我更倾向于安静独处，社交会让我消耗精力。" },
+        { id: "q07", dim: "A", rev: true, text: "我在合作中更容易挑剔他人，难以妥协。" },
+        { id: "q08", dim: "C", rev: true, text: "我经常拖延，临近截止才开始动手。" },
+        { id: "q09", dim: "N", rev: true, text: "即使遇到困难，我也很少紧张或焦虑。" },
+        { id: "q10", dim: "O", rev: true, text: "我更喜欢稳定熟悉的做法，不太愿意改变。" },
+
+        { id: "q11", dim: "E", rev: false, text: "在公开场合表达观点对我来说比较自然。" },
+        { id: "q12", dim: "A", rev: false, text: "当别人需要帮助时，我通常愿意伸出援手。" },
+        { id: "q13", dim: "C", rev: false, text: "我会把复杂任务拆解成步骤并持续推进。" },
+        { id: "q14", dim: "N", rev: false, text: "遇到不确定时，我会反复担心最坏情况。" },
+        { id: "q15", dim: "O", rev: false, text: "我喜欢创意、审美或新颖的想法。" },
+
+        { id: "q16", dim: "E", rev: true, text: "我不太喜欢成为人群焦点。" },
+        { id: "q17", dim: "A", rev: true, text: "在争论中，我更愿意'赢'而不是'达成共识'。" },
+        { id: "q18", dim: "C", rev: true, text: "我经常丢三落四或忘记重要细节。" },
+        { id: "q19", dim: "N", rev: true, text: "我通常情绪稳定，很少被小事影响。" },
+        { id: "q20", dim: "O", rev: true, text: "相比新点子，我更信赖传统经验与常规流程。" },
+      ];
+
+      const DIM_NAME = {
+        O: "开放性（Open）",
+        C: "尽责性（Conscientious）",
+        E: "外向性（Extraversion）",
+        A: "宜人性（Agreeableness）",
+        N: "神经质（Neuroticism）",
+      };
+
+      const answers = {};
+
+      function clamp(n, a, b) {
+        return Math.max(a, Math.min(b, n));
+      }
+
+      function scoreAnswers() {
+        const dims = { O: [], C: [], E: [], A: [], N: [] };
+        for (const q of QUESTIONS) {
+          const raw = Number(answers[q.id] || 0);
+          if (!raw) continue;
+          const v = clamp(raw, 1, 5);
+          const s = q.rev ? (6 - v) : v;
+          dims[q.dim].push(s);
+        }
+
+        const scores = {};
+        for (const k of Object.keys(dims)) {
+          const arr = dims[k];
+          if (!arr.length) {
+            scores[k] = null;
+            continue;
+          }
+          const avg = arr.reduce((a, b) => a + b, 0) / arr.length;
+          scores[k] = Math.round(((avg - 1) / 4) * 100);
+        }
+        return scores;
+      }
+
+      function band(score) {
+        if (score == null) return "未完成";
+        if (score >= 67) return "高";
+        if (score >= 34) return "中";
+        return "低";
+      }
+
+      function summarize(scores) {
+        const tags = [];
+        if (scores.C != null && scores.C >= 67) tags.push("自律执行力强");
+        if (scores.O != null && scores.O >= 67) tags.push("探索与学习驱动");
+        if (scores.E != null && scores.E >= 67) tags.push("外向表达强");
+        if (scores.A != null && scores.A >= 67) tags.push("合作友好");
+        if (scores.N != null && scores.N >= 67) tags.push("压力敏感（需情绪管理）");
+        if (scores.N != null && scores.N <= 33) tags.push("情绪稳定");
+        if (!tags.length) tags.push("画像偏均衡");
+
+        const env = [];
+        if (scores.E != null && scores.E >= 67) env.push("更适合高沟通/对外场景");
+        if (scores.E != null && scores.E <= 33) env.push("更适合深度专注/独立交付");
+        if (scores.C != null && scores.C >= 67) env.push("适合目标清晰、节奏快的岗位");
+        if (scores.O != null && scores.O >= 67) env.push("适合创新/探索型方向");
+        if (scores.N != null && scores.N >= 67) env.push("建议选择支持体系更强的团队");
+
+        return { tags, env };
+      }
+
+      function formatResult(scores, summary) {
+        const lines = [];
+        lines.push("五维结果（0-100）：");
+        for (const k of ["O", "C", "E", "A", "N"]) {
+          const v = scores[k];
+          lines.push(`- ${DIM_NAME[k]}：${v == null ? "—" : v}（${band(v)}）`);
+        }
+        lines.push("");
+        lines.push("画像标签：");
+        for (const t of summary.tags) lines.push(`- ${t}`);
+        if (summary.env.length) {
+          lines.push("");
+          lines.push("职业环境建议：");
+          for (const t of summary.env) lines.push(`- ${t}`);
+        }
+        
+        // 添加职业兴趣
+        const careerInterests = collectCareerInterest();
+        if (Object.keys(careerInterests).length > 0) {
+          lines.push("");
+          lines.push("职业兴趣：");
+          for (const [interest, level] of Object.entries(careerInterests)) {
+            const levelText = {
+              'very': '非常',
+              'fairly': '比较',
+              'somewhat': '一般'
+            }[level] || level;
+            lines.push(`- ${interest}（${levelText}）`);
+          }
+        }
+        
+        // 添加可利用资源
+        const resources = collectResources();
+        if (resources.length > 0) {
+          lines.push("");
+          lines.push("可利用资源：");
+          for (const resource of resources) {
+            lines.push(`- ${resource}`);
+          }
+        }
+        
+        // 添加约束条件
+        const constraints = collectConstraints();
+        const constraintLines = [];
+        
+        if (constraints.city_preference) {
+          const cityText = {
+            'first_tier': '一线城市/北上广深',
+            'new_first': '新一线/省会城市',
+            'hometown': '家乡或离家近',
+            'specific': '特定城市'
+          }[constraints.city_preference] || constraints.city_preference;
+          constraintLines.push(`城市偏好：${cityText}`);
+          if (constraints.city_preference === 'specific' && constraints.specific_city) {
+            constraintLines.push(`特定城市：${constraints.specific_city}`);
+          }
+        }
+        
+        if (constraints.econ_risk) {
+          const econText = {
+            'can_low_salary': '可接受前1-2年薪资一般',
+            'need_stable': '需要尽快有稳定收入'
+          }[constraints.econ_risk] || constraints.econ_risk;
+          constraintLines.push(`经济承受：${econText}`);
+        }
+        
+        if (constraints.work_style) {
+          const workText = {
+            'can_overtime': '可以接受较高强度加班',
+            'need_regular': '更希望作息规律'
+          }[constraints.work_style] || constraints.work_style;
+          constraintLines.push(`工作风格：${workText}`);
+        }
+        
+        if (constraintLines.length > 0) {
+          lines.push("");
+          lines.push("约束条件：");
+          for (const line of constraintLines) {
+            lines.push(`- ${line}`);
+          }
+        }
+        
+        return lines.join("\n");
+      }
+
+      function escapeHtml(s) {
+        return String(s)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function updateProgress() {
+        // 移除实时结果更新功能
+      }
+
+      function renderQuestions() {
+        questionsEl.innerHTML = "";
+        QUESTIONS.forEach((q, idx) => {
+          const wrap = document.createElement("div");
+          wrap.className = "list-item";
+          wrap.style.marginBottom = "16px";
+          wrap.innerHTML =
+            `<div class="list-item-title" style="margin-bottom:12px;font-size:14px">${idx + 1}. ${escapeHtml(q.text)}</div>` +
+            `<div class="scale-options" id="scale-${q.id}"></div>` +
+            `<div class="scale-labels"><span>非常不符合</span><span>非常符合</span></div>`;
+          
+          const scaleContainer = wrap.querySelector(`#scale-${q.id}`);
+          SCALE.forEach(opt => {
+            const btn = document.createElement("div");
+            btn.className = "scale-option";
+            btn.textContent = opt.t;
+            btn.dataset.value = opt.v;
+            btn.addEventListener("click", () => {
+              scaleContainer.querySelectorAll(".scale-option").forEach(b => b.classList.remove("selected"));
+              btn.classList.add("selected");
+              answers[q.id] = opt.v;
+            });
+            scaleContainer.appendChild(btn);
+          });
+          
+          questionsEl.appendChild(wrap);
+        });
+      }
+
+      const careerInterest = {};
+      const resourcesChecked = {};
+
+      function renderCareerInterest() {
+        const el = document.getElementById("careerInterest");
+        el.innerHTML = "";
+        CAREER_OPTIONS.forEach(opt => {
+          const wrap = document.createElement("div");
+          wrap.className = "list-item";
+          wrap.style.marginBottom = "12px";
+          wrap.style.padding = "12px";
+          wrap.style.border = "2px solid var(--border)";
+          wrap.style.borderRadius = "var(--radius-md)";
+          wrap.style.background = "#f9fafb";
+          wrap.innerHTML =
+            `<label style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;cursor:pointer">` +
+            `<input type="checkbox" id="ci-${opt.id}" style="width:18px;height:18px;cursor:pointer" /> ` +
+            `<span style="font-weight:600;flex:1">${escapeHtml(opt.name)}</span>` +
+            `<select id="ci-lvl-${opt.id}" style="width:120px;padding:8px;border:2px solid var(--border);border-radius:var(--radius-md);background:white;font-size:14px;cursor:pointer" disabled><option value="">兴趣程度</option><option value="very">非常</option><option value="fairly">比较</option><option value="somewhat">一般</option></select>` +
+            `</label>`;
+          wrap.querySelector(`#ci-${opt.id}`).addEventListener("change", (e) => {
+            wrap.querySelector(`#ci-lvl-${opt.id}`).disabled = !e.target.checked;
+            if (e.target.checked) {
+              wrap.style.borderColor = "var(--primary)";
+              wrap.style.background = "var(--primary-light)";
+            } else {
+              wrap.style.borderColor = "var(--border)";
+              wrap.style.background = "#f9fafb";
+            }
+          });
+          el.appendChild(wrap);
+        });
+      }
+
+      function renderResources() {
+        const el = document.getElementById("resources");
+        el.innerHTML = "";
+        RESOURCE_OPTIONS.forEach(opt => {
+          const wrap = document.createElement("label");
+          wrap.className = "list-item";
+          wrap.style.display = "flex";
+          wrap.style.alignItems = "center";
+          wrap.style.padding = "12px";
+          wrap.style.border = "2px solid var(--border)";
+          wrap.style.borderRadius = "var(--radius-md)";
+          wrap.style.background = "#f9fafb";
+          wrap.style.cursor = "pointer";
+          wrap.style.marginBottom = "8px";
+          wrap.innerHTML = `<input type="checkbox" id="res-${opt.id}" style="width:18px;height:18px;cursor:pointer" /> <span style="font-weight:600">${escapeHtml(opt.name)}</span>`;
+          wrap.querySelector(`input`).addEventListener("change", (e) => {
+            if (e.target.checked) {
+              wrap.style.borderColor = "var(--primary)";
+              wrap.style.background = "var(--primary-light)";
+            } else {
+              wrap.style.borderColor = "var(--border)";
+              wrap.style.background = "#f9fafb";
+            }
+          });
+          el.appendChild(wrap);
+        });
+      }
+
+      function collectCareerInterest() {
+        const out = {};
+        CAREER_OPTIONS.forEach(opt => {
+          const cb = document.getElementById(`ci-${opt.id}`);
+          const sel = document.getElementById(`ci-lvl-${opt.id}`);
+          if (cb && cb.checked && sel) out[opt.name] = sel.value || "一般";
+        });
+        return out;
+      }
+
+      function collectResources() {
+        const out = [];
+        RESOURCE_OPTIONS.forEach(opt => {
+          const cb = document.getElementById(`res-${opt.id}`);
+          if (cb && cb.checked) out.push(opt.name);
+        });
+        const other = (document.getElementById("resourceOther") || {}).value || "";
+        if (other.trim()) out.push("其他：" + other.trim());
+        return out;
+      }
+
+      function collectConstraints() {
+        const cityPref = (document.querySelector("input[name='cityPref']:checked") || {}).value || "";
+        const econRisk = (document.querySelector("input[name='econRisk']:checked") || {}).value || "";
+        const workStyle = (document.querySelector("input[name='workStyle']:checked") || {}).value || "";
+        const specificCity = document.getElementById("specificCity").value.trim();
+        return { 
+          city_preference: cityPref, 
+          specific_city: specificCity, 
+          econ_risk: econRisk, 
+          work_style: workStyle 
+        };
+      }
+
+      renderCareerInterest();
+      renderResources();
+      renderQuestions();
+      
+      // 处理自定义单选按钮
+      document.querySelectorAll('.radio-button').forEach(button => {
+        button.addEventListener('click', function() {
+          const radio = this.querySelector('input[type="radio"]');
+          const name = radio.name;
+          
+          // 清除同组其他按钮的选中状态
+          document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+            const parent = input.closest('.radio-button');
+            if (parent) {
+              parent.style.borderColor = 'var(--border)';
+              parent.style.background = 'white';
+              parent.style.transform = 'none';
+            }
+          });
+          
+          // 设置当前按钮为选中状态
+          radio.checked = true;
+          this.style.borderColor = 'var(--primary)';
+          this.style.background = 'var(--primary-light)';
+          this.style.transform = 'translateY(-2px)';
+          
+          // 处理特定城市输入框的显示/隐藏
+          if (name === 'cityPref') {
+            const specificCityInput = document.getElementById('specificCity');
+            if (radio.value === 'specific') {
+              specificCityInput.style.display = 'block';
+            } else {
+              specificCityInput.style.display = 'none';
+            }
+          }
+        });
+      });
+
+      // 绘制雷达图函数
+      function drawRadarChart(scores) {
+        const container = document.getElementById('radarChart');
+        container.style.display = 'block';
+        
+        // 自适应容器宽度，确保不影响布局比例
+        const containerWidth = container.clientWidth || 300;
+        const width = Math.min(containerWidth, 300);
+        const height = width;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const radius = width * 0.4;
+        
+        // 五维数据
+        const dimensions = ["O", "C", "E", "A", "N"];
+        const labels = ["开放性", "尽责性", "外向性", "宜人性", "神经质"];
+        const angleStep = (2 * Math.PI) / dimensions.length;
+        
+        // 清空容器
+        container.innerHTML = '';
+        
+        // 创建SVG元素
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('width', width);
+        svg.setAttribute('height', height);
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+        container.appendChild(svg);
+        
+        // 绘制网格
+        for (let level = 1; level <= 5; level++) {
+          const levelRadius = (radius / 5) * level;
+          const points = [];
+          for (let i = 0; i < dimensions.length; i++) {
+            const angle = i * angleStep - Math.PI / 2;
+            const x = centerX + levelRadius * Math.cos(angle);
+            const y = centerY + levelRadius * Math.sin(angle);
+            points.push(`${x},${y}`);
+          }
+          points.push(points[0]); // 闭合路径
+          
+          const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+          polygon.setAttribute('points', points.join(' '));
+          polygon.setAttribute('fill', 'none');
+          polygon.setAttribute('stroke', '#e0e0e0');
+          polygon.setAttribute('stroke-width', '1');
+          svg.appendChild(polygon);
+        }
+        
+        // 绘制轴线
+        for (let i = 0; i < dimensions.length; i++) {
+          const angle = i * angleStep - Math.PI / 2;
+          const x1 = centerX;
+          const y1 = centerY;
+          const x2 = centerX + radius * Math.cos(angle);
+          const y2 = centerY + radius * Math.sin(angle);
+          
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', x1);
+          line.setAttribute('y1', y1);
+          line.setAttribute('x2', x2);
+          line.setAttribute('y2', y2);
+          line.setAttribute('stroke', '#e0e0e0');
+          line.setAttribute('stroke-width', '1');
+          svg.appendChild(line);
+        }
+        
+        // 绘制数据点和多边形
+        const dataPoints = [];
+        for (let i = 0; i < dimensions.length; i++) {
+          const dim = dimensions[i];
+          const score = scores[dim] || 0;
+          const normalizedScore = score / 100;
+          const angle = i * angleStep - Math.PI / 2;
+          const pointRadius = radius * normalizedScore;
+          const x = centerX + pointRadius * Math.cos(angle);
+          const y = centerY + pointRadius * Math.sin(angle);
+          dataPoints.push(`${x},${y}`);
+          
+          // 绘制数据点
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', x);
+          circle.setAttribute('cy', y);
+          circle.setAttribute('r', '5');
+          circle.setAttribute('fill', 'var(--primary)');
+          circle.setAttribute('stroke', 'white');
+          circle.setAttribute('stroke-width', '2');
+          svg.appendChild(circle);
+        }
+        
+        // 绘制数据多边形
+        if (dataPoints.length > 0) {
+          dataPoints.push(dataPoints[0]); // 闭合路径
+          const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+          polygon.setAttribute('points', dataPoints.join(' '));
+          polygon.setAttribute('fill', 'var(--primary)');
+          polygon.setAttribute('fill-opacity', '0.3');
+          polygon.setAttribute('stroke', 'var(--primary)');
+          polygon.setAttribute('stroke-width', '2');
+          svg.appendChild(polygon);
+        }
+        
+        // 添加标签
+        for (let i = 0; i < dimensions.length; i++) {
+          const angle = i * angleStep - Math.PI / 2;
+          const labelRadius = radius + 20;
+          const x = centerX + labelRadius * Math.cos(angle);
+          const y = centerY + labelRadius * Math.sin(angle);
+          
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('x', x);
+          text.setAttribute('y', y);
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('dominant-baseline', 'central');
+          text.setAttribute('font-size', '12');
+          text.setAttribute('fill', 'var(--text)');
+          text.textContent = labels[i];
+          svg.appendChild(text);
+        }
+      }
+
+      // 在左侧显示最终结果的函数
+      function displayFinalResult(scores, summary) {
+        // 显示结果卡片
+        document.getElementById('resultsCard').style.display = 'block';
+        
+        emptyState.style.display = 'none';
+        out.style.display = 'block';
+        
+        // 绘制雷达图
+        drawRadarChart(scores);
+        
+        const lines = [];
+        lines.push("五维结果（0-100）：");
+        for (const k of ["O", "C", "E", "A", "N"]) {
+          const v = scores[k];
+          lines.push(`- ${DIM_NAME[k]}：${v == null ? "—" : v}（${band(v)}）`);
+        }
+        lines.push("");
+        lines.push("画像标签：");
+        for (const t of summary.tags) lines.push(`- ${t}`);
+        if (summary.env.length) {
+          lines.push("");
+          lines.push("职业环境建议：");
+          for (const t of summary.env) lines.push(`- ${t}`);
+        }
+        
+        // 添加职业兴趣
+        const careerInterests = collectCareerInterest();
+        if (Object.keys(careerInterests).length > 0) {
+          lines.push("");
+          lines.push("职业兴趣：");
+          for (const [interest, level] of Object.entries(careerInterests)) {
+            const levelText = {
+              'very': '非常',
+              'fairly': '比较',
+              'somewhat': '一般'
+            }[level] || level;
+            lines.push(`- ${interest}（${levelText}）`);
+          }
+        }
+        
+        // 添加可利用资源
+        const resources = collectResources();
+        if (resources.length > 0) {
+          lines.push("");
+          lines.push("可利用资源：");
+          for (const resource of resources) {
+            lines.push(`- ${resource}`);
+          }
+        }
+        
+        // 添加约束条件
+        const constraints = collectConstraints();
+        const constraintLines = [];
+        
+        if (constraints.city_preference) {
+          const cityText = {
+            'first_tier': '一线城市/北上广深',
+            'new_first': '新一线/省会城市',
+            'hometown': '家乡或离家近',
+            'specific': '特定城市'
+          }[constraints.city_preference] || constraints.city_preference;
+          constraintLines.push(`城市偏好：${cityText}`);
+          if (constraints.city_preference === 'specific' && constraints.specific_city) {
+            constraintLines.push(`特定城市：${constraints.specific_city}`);
+          }
+        }
+        
+        if (constraints.econ_risk) {
+          const econText = {
+            'can_low_salary': '可接受前1-2年薪资一般',
+            'need_stable': '需要尽快有稳定收入'
+          }[constraints.econ_risk] || constraints.econ_risk;
+          constraintLines.push(`经济承受：${econText}`);
+        }
+        
+        if (constraints.work_style) {
+          const workText = {
+            'can_overtime': '可以接受较高强度加班',
+            'need_regular': '更希望作息规律'
+          }[constraints.work_style] || constraints.work_style;
+          constraintLines.push(`工作风格：${workText}`);
+        }
+        
+        if (constraintLines.length > 0) {
+          lines.push("");
+          lines.push("约束条件：");
+          for (const line of constraintLines) {
+            lines.push(`- ${line}`);
+          }
+        }
+        
+        out.textContent = lines.join("\n");
+      }
+
+      document.getElementById("form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const scores = scoreAnswers();
+        const summary = summarize(scores);
+        
+        msg.textContent = "提交中...";
+        try {
+          const data = await CareerAid.apiFetch("/submit_test", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              answers,
+              scores,
+              summary,
+              career_interest: collectCareerInterest(),
+              resources: collectResources(),
+              constraints: collectConstraints(),
+              note: document.getElementById("note").value.trim(),
+            }),
+          });
+          msg.textContent = "已保存。";
+          // 在左侧显示格式化结果
+          displayFinalResult(scores, summary);
+          
+          // 滚动到顶部，让用户立即看到测评结果
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        } catch (e) {
+          msg.textContent = "失败：" + (e.message || String(e));
+        }
+      });
+    </script>
+  </body>
+</html>

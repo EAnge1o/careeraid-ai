@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="static/favicon.svg" />
+    <title>简历解析 - CareerAid AI</title>
+    <link rel="stylesheet" href="static/style.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- 侧边栏 -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="logo">CareerAid AI</div>
+          <div class="tagline">你的专属AI职业规划助手</div>
+        </div>
+        
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <div class="nav-section-title">核心功能</div>
+            <a class="nav-item active" href="upload.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              简历解析
+            </a>
+            <a class="nav-item" href="test.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              性格测评
+            </a>
+            <a class="nav-item" href="match.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              人岗匹配
+            </a>
+            <a class="nav-item" href="report.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              报告生成
+            </a>
+          </div>
+          
+          <div class="nav-section">
+            <div class="nav-section-title">更多</div>
+            <a class="nav-item" href="chat.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              AI对话
+            </a>
+            <a class="nav-item" href="job.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              提升规划
+            </a>
+            <a class="nav-item" href="admin.html" id="adminLink" style="display: none;">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              管理员后台
+            </a>
+          </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+          <div class="user-info" id="userInfo">
+            <div class="user-avatar">U</div>
+            <div class="user-meta">
+              <div class="user-name" id="userName">用户</div>
+              <div class="user-role">学生</div>
+            </div>
+          </div>
+          <button class="btn btn-danger" style="width:100%;margin-top:12px" id="logoutBtn">退出登录</button>
+        </div>
+      </aside>
+
+      <!-- 主内容区 -->
+      <main class="main-content">
+        <header class="topbar">
+          <button class="menu-toggle" id="menuToggle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <h1 class="topbar-title">简历解析</h1>
+          <div class="topbar-actions">
+            <span class="badge badge-secondary">支持 docx / pdf / jpg</span>
+          </div>
+        </header>
+
+        <!-- 成功提示窗口 -->
+        <div id="successModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center">
+          <div style="background:white;border-radius:var(--radius-md);padding:32px;max-width:400px;width:90%;text-align:center;box-shadow:var(--shadow-lg)">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" style="margin:0 auto 20px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <h3 style="margin-bottom:12px;font-size:18px;font-weight:600">上传成功！</h3>
+            <p style="margin-bottom:24px;color:var(--text-muted)">简历已成功上传并解析完成</p>
+            <button id="closeModal" class="btn btn-primary" style="width:100%">确定</button>
+          </div>
+        </div>
+
+        <div class="page-content">
+          <!-- 非对称布局 -->
+          <div class="asymmetric-grid">
+            <!-- 左侧：上传表单 -->
+            <div class="card card-featured">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title">上传 / 手动录入</h2>
+                  <p class="card-subtitle">支持多种格式，也可手动输入信息</p>
+                </div>
+                <!-- 独特插画 - 简历解析 -->
+                <svg width="80" height="80" viewBox="0 0 80 80" class="illustration" style="opacity: 0.9;">
+                  <!-- 文件主体 -->
+                  <rect x="20" y="15" width="40" height="45" fill="var(--primary-light)" stroke="#000" stroke-width="2"/>
+                  <!-- 文件折角 -->
+                  <polygon points="60,15 60,25 50,15" fill="var(--primary)" stroke="#000" stroke-width="2"/>
+                  <!-- 简历内容行 -->
+                  <line x1="28" y1="30" x2="52" y2="30" stroke="#000" stroke-width="2"/>
+                  <line x1="28" y1="40" x2="52" y2="40" stroke="#000" stroke-width="2"/>
+                  <line x1="28" y1="50" x2="52" y2="50" stroke="#000" stroke-width="2"/>
+                  <!-- 放大镜 -->
+                  <circle cx="60" cy="60" r="10" fill="#fff" stroke="var(--primary)" stroke-width="2"/>
+                  <line x1="66" y1="66" x2="74" y2="74" stroke="#000" stroke-width="2"/>
+                </svg>
+              </div>
+              
+              <form class="form" id="form">
+                <div class="form-group">
+                  <label>简历文件（可选）</label>
+                  <div class="file-upload" id="fileUpload">
+                    <input id="resume_file" type="file" accept=".docx,.pdf,.jpg,.jpeg,.png" style="display:none"/>
+                    <!-- 默认上传图标 -->
+                    <svg id="uploadIcon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:12px;color:var(--primary);margin:0 auto 12px auto;display:block"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <!-- 成功图标：文件上打对号 -->
+                    <svg id="successIcon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:12px;color:var(--primary);display:none;margin:0 auto 12px auto"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="9 15 11 17 15 13"/></svg>
+                    <div id="uploadText" style="font-weight:600">点击或拖拽上传简历</div>
+                    <div id="uploadHint" class="form-hint">支持 docx / pdf / jpg 格式</div>
+                    <div id="fileName" style="font-weight:600;color:var(--primary);margin-top:8px;display:none"></div>
+                  </div>
+
+                </div>
+
+                <div class="row">
+                  <div class="form-group">
+                    <label>专业（可选）</label>
+                    <input id="major" placeholder="例如：计算机科学与技术" />
+                  </div>
+                  <div class="form-group">
+                    <label>证书（可选）</label>
+                    <input id="certs" placeholder="例如：CET-6, 计算机二级" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>技能关键词（可选）</label>
+                  <input id="skills" placeholder="例如：Python, SQL, Flask, 数据分析" />
+                </div>
+
+                <div class="form-group">
+                  <label>实习经历摘要（可选）</label>
+                  <textarea id="internships" placeholder="例如：xx公司数据分析实习，负责指标体系与报表自动化" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label>简历补充（可选）</label>
+                  <textarea id="resume_text" placeholder="粘贴教育背景、项目/实习、技能清单等内容，越完整越准确" rows="5"></textarea>
+                </div>
+
+                <div style="display:flex;gap:12px;flex-wrap:wrap">
+                  <button class="btn btn-primary" type="submit">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    上传并解析
+                  </button>
+                  <a class="btn" href="chat.html">返回对话</a>
+                </div>
+                <div class="form-hint" id="msg"></div>
+              </form>
+            </div>
+
+            <!-- 右侧：解析结果 -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title">解析结果</h2>
+                  <p class="card-subtitle">能力画像预览</p>
+                </div>
+              </div>
+              
+              <div class="form-hint">解析完成后会保存到后端数据库 `students.resume_parsed_json`。</div>
+              <div class="hr"></div>
+              
+              <!-- 空状态插画 - 独特设计 -->
+              <div id="emptyState" style="text-align:center;padding:40px 20px">
+                <svg width="140" height="120" viewBox="0 0 140 120" class="illustration" style="margin-bottom:16px;opacity: 0.9;">
+                  <!-- 文件堆叠 -->
+                  <rect x="30" y="25" width="60" height="70" fill="var(--primary-light)" stroke="#000" stroke-width="2"/>
+                  <rect x="25" y="20" width="60" height="70" fill="#fff" stroke="#000" stroke-width="2"/>
+                  <rect x="20" y="15" width="60" height="70" fill="#fff" stroke="var(--primary)" stroke-width="3"/>
+                  <!-- 文件内容 -->
+                  <line x1="30" y1="30" x2="70" y2="30" stroke="#000" stroke-width="2"/>
+                  <line x1="30" y1="40" x2="65" y2="40" stroke="#000" stroke-width="2"/>
+                  <line x1="30" y1="50" x2="60" y2="50" stroke="#000" stroke-width="2"/>
+                  <!-- AI分析指示 -->
+                  <circle cx="95" cy="75" r="18" fill="var(--primary)" stroke="#000" stroke-width="2"/>
+                  <text x="88" y="80" font-family="sans-serif" font-size="14" font-weight="bold" fill="#000">AI</text>
+                  <!-- 连接线 -->
+                  <line x1="80" y1="50" x2="85" y2="65" stroke="#000" stroke-width="2" stroke-dasharray="3,3"/>
+                  <!-- 数据点 -->
+                  <circle cx="100" cy="35" r="5" fill="var(--primary)" stroke="#000" stroke-width="1"/>
+                  <circle cx="115" cy="50" r="4" fill="var(--primary)" stroke="#000" stroke-width="1"/>
+                  <circle cx="110" cy="25" r="3" fill="var(--primary)" stroke="#000" stroke-width="1"/>
+                </svg>
+                <div style="color:var(--text-muted);font-size:14px;font-weight:600">上传简历后将在此显示解析结果</div>
+                <div style="color:var(--text-muted);font-size:12px;margin-top:8px">AI智能提取 · 能力画像</div>
+              </div>
+              
+              <div id="out" style="white-space:pre-wrap;word-break:break-word;margin:0;display:none;padding:20px;border:2px solid var(--border);border-radius:var(--radius-md);background:#f9fafb;font-family:monospace;font-size:14px;line-height:1.7"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="static/app.js"></script>
+    <script>
+      if (!CareerAid.requireAuth()) throw new Error("not authed");
+      
+      // 加载用户信息
+      CareerAid.apiFetch('/me').then(data => {
+        const s = data.student || {};
+        document.getElementById('userName').textContent = s.username || '用户';
+        document.querySelector('.user-avatar').textContent = (s.username || 'U')[0].toUpperCase();
+        
+        // 显示管理员后台链接
+        if (s.username === 'admin') {
+          document.getElementById('adminLink').style.display = 'block';
+        }
+      }).catch(() => {});
+      
+      // 退出登录
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        CareerAid.logout();
+      });
+      
+      // 移动端菜单
+      document.getElementById('menuToggle').addEventListener('click', () => {
+        document.querySelector('.sidebar').classList.toggle('open');
+      });
+      
+      // 文件上传点击
+      document.getElementById('fileUpload').addEventListener('click', () => {
+        document.getElementById('resume_file').click();
+      });
+
+      // 文件选择后显示成功状态
+      document.getElementById('resume_file').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          // 显示成功图标
+          document.getElementById('uploadIcon').style.display = 'none';
+          const successIcon = document.getElementById('successIcon');
+          successIcon.style.display = 'block';
+          successIcon.style.margin = '0 auto 12px auto';
+          // 更新文本
+          document.getElementById('uploadText').textContent = '已成功上传文件';
+          document.getElementById('uploadHint').style.display = 'none';
+          // 显示文件名
+          const fileNameEl = document.getElementById('fileName');
+          fileNameEl.textContent = file.name;
+          fileNameEl.style.display = 'block';
+        }
+      });
+
+      const msg = CareerAid.qs("msg");
+      const out = CareerAid.qs("out");
+      const emptyState = document.getElementById('emptyState');
+      const successModal = document.getElementById('successModal');
+      const closeModal = document.getElementById('closeModal');
+      
+      // 关闭成功提示窗口
+      closeModal.addEventListener('click', () => {
+        successModal.style.display = 'none';
+      });
+
+      // 格式化显示解析结果
+      function formatResumeResult(parsed) {
+        const lines = [];
+        
+        // 基本信息
+        if (parsed.name || parsed.contact || parsed.major) {
+          lines.push("基本信息：");
+          if (parsed.name) lines.push(`- 姓名：${parsed.name}`);
+          if (parsed.contact) lines.push(`- 联系方式：${parsed.contact}`);
+          if (parsed.major) lines.push(`- 专业：${parsed.major}`);
+          lines.push("");
+        }
+        
+        // 教育背景
+        if (parsed.education) {
+          if (Array.isArray(parsed.education) && parsed.education.length > 0) {
+            lines.push("教育背景：");
+            parsed.education.forEach(edu => {
+              const eduStr = [];
+              if (edu.school) eduStr.push(edu.school);
+              if (edu.major) eduStr.push(edu.major);
+              if (edu.degree) eduStr.push(edu.degree);
+              if (edu.period) eduStr.push(edu.period);
+              if (eduStr.length > 0) {
+                lines.push(`- ${eduStr.join(" | ")}`);
+              }
+            });
+            lines.push("");
+          } else if (typeof parsed.education === 'string') {
+            lines.push("教育背景：");
+            lines.push(`- ${parsed.education}`);
+            lines.push("");
+          }
+        }
+        
+        // 专业技能
+        if (parsed.skills) {
+          if (Array.isArray(parsed.skills) && parsed.skills.length > 0) {
+            lines.push("专业技能：");
+            lines.push(`- ${parsed.skills.join("、")}`);
+            lines.push("");
+          } else if (typeof parsed.skills === 'string') {
+            lines.push("专业技能：");
+            lines.push(`- ${parsed.skills}`);
+            lines.push("");
+          }
+        }
+        
+        // 亮点技能
+        if (parsed.highlights && Array.isArray(parsed.highlights) && parsed.highlights.length > 0) {
+          lines.push("亮点技能：");
+          lines.push(`- ${parsed.highlights.join("、")}`);
+          lines.push("");
+        }
+        
+        // 证书
+        if (parsed.certs) {
+          if (Array.isArray(parsed.certs) && parsed.certs.length > 0) {
+            lines.push("证书：");
+            lines.push(`- ${parsed.certs.join("、")}`);
+            lines.push("");
+          } else if (typeof parsed.certs === 'string') {
+            lines.push("证书：");
+            lines.push(`- ${parsed.certs}`);
+            lines.push("");
+          }
+        }
+        
+        // 实习经历
+        if (parsed.internships) {
+          if (Array.isArray(parsed.internships) && parsed.internships.length > 0) {
+            lines.push("实习经历：");
+            parsed.internships.forEach((intern, index) => {
+              const internStr = [];
+              if (intern.company) internStr.push(intern.company);
+              if (intern.position) internStr.push(intern.position);
+              if (intern.period) internStr.push(intern.period);
+              if (intern.description) internStr.push(`- ${intern.description}`);
+              if (internStr.length > 0) {
+                lines.push(`- [${index + 1}] ${internStr.join(" | ")}`);
+              }
+            });
+            lines.push("");
+          } else if (typeof parsed.internships === 'string') {
+            lines.push("实习经历：");
+            lines.push(`- ${parsed.internships}`);
+            lines.push("");
+          }
+        }
+        
+        // 项目经验
+        if (parsed.projects) {
+          if (Array.isArray(parsed.projects) && parsed.projects.length > 0) {
+            lines.push("项目经验：");
+            parsed.projects.forEach((project, index) => {
+              const projectStr = [];
+              if (project.name) projectStr.push(project.name);
+              if (project.role) projectStr.push(project.role);
+              if (project.period) projectStr.push(project.period);
+              if (project.description) projectStr.push(`- ${project.description}`);
+              if (projectStr.length > 0) {
+                lines.push(`- [${index + 1}] ${projectStr.join(" | ")}`);
+              }
+            });
+            lines.push("");
+          } else if (typeof parsed.projects === 'string') {
+            lines.push("项目经验：");
+            lines.push(`- ${parsed.projects}`);
+            lines.push("");
+          }
+        }
+        
+        // 能力画像（使用dimensions字段，与后端保持一致）
+        if (parsed.dimensions) {
+          lines.push("能力画像：");
+          if (typeof parsed.dimensions === 'object' && parsed.dimensions !== null) {
+            Object.entries(parsed.dimensions).forEach(([key, value]) => {
+              lines.push(`- ${key}：${value}`);
+            });
+          } else if (typeof parsed.dimensions === 'string') {
+            lines.push(`- ${parsed.dimensions}`);
+          }
+          lines.push("");
+        }
+        
+        // 评分信息
+        if (parsed.completeness_score !== undefined || parsed.competitiveness_score !== undefined) {
+          lines.push("评分信息：");
+          if (parsed.completeness_score !== undefined) {
+            lines.push(`- 完整度评分：${parsed.completeness_score}`);
+          }
+          if (parsed.competitiveness_score !== undefined) {
+            lines.push(`- 竞争力评分：${parsed.competitiveness_score}`);
+          }
+          lines.push("");
+        }
+        
+        // 总结
+        if (parsed.summary) {
+          lines.push("简历总结：");
+          lines.push(parsed.summary);
+          lines.push("");
+        }
+        
+        return lines.join("\n") || "解析结果为空，请检查输入内容。";
+      }
+
+      CareerAid.qs("form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        msg.textContent = "解析中...";
+        emptyState.style.display = 'none';
+        out.style.display = 'block';
+        out.textContent = "";
+
+        const fd = new FormData();
+        const f = CareerAid.qs("resume_file").files[0];
+        if (f) fd.append("resume_file", f);
+        fd.append("major", CareerAid.qs("major").value.trim());
+        fd.append("skills", CareerAid.qs("skills").value.trim());
+        fd.append("certs", CareerAid.qs("certs").value.trim());
+        fd.append("internships", CareerAid.qs("internships").value.trim());
+        fd.append("resume_text", CareerAid.qs("resume_text").value.trim());
+
+        try {
+          const data = await CareerAid.apiFetch("/upload_resume", { method: "POST", body: fd });
+          msg.textContent = "解析完成，已保存。";
+          // 显示格式化的解析报告
+          out.textContent = formatResumeResult(data.resume_parsed || {});
+          // 显示成功提示窗口
+          successModal.style.display = 'flex';
+        } catch (err) {
+          msg.textContent = "失败：" + (err.message || String(err));
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="static/favicon.svg" />
+    <title>维度差距及双线对比 - CareerAid AI</title>
+  <link rel="stylesheet" href="static/style.css">
+  <script src="static/echarts.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- 主内容区 -->
+    <main class="main">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <a href="match.html" class="btn btn-sm btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            返回匹配结果
+          </a>
+        </div>
+        <div class="topbar-right">
+          <h2>维度差距及双线对比</h2>
+        </div>
+      </header>
+
+      <!-- 内容区 -->
+      <div class="content" style="max-width: 1000px; margin: 0 auto;">
+        <!-- 上方框：雷达图 + 差距分析 -->
+        <div class="card" style="margin-bottom: 16px;">
+          <div class="card-header">
+            <h3 class="card-title">能力评估与差距分析</h3>
+            <p class="card-subtitle">多维度能力评估与提升建议</p>
+          </div>
+          <div class="card-body" style="display: flex; gap: 20px;">
+            <!-- 左侧：雷达图 -->
+            <div style="flex: 1;">
+              <div id="radar" style="height:300px"></div>
+            </div>
+            <!-- 右侧：差距分析 -->
+            <div style="flex: 1;">
+              <h4 style="margin-top: 0; margin-bottom: 15px; color: var(--text);">差距分析与建议</h4>
+              <div id="gap" style="display: flex; flex-direction: column; gap: 15px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 下方框：双线匹配对比 -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">双线匹配对比</h3>
+            <p class="card-subtitle">在线大模型 vs 离线算法</p>
+          </div>
+          <div class="card-body" style="display: flex; gap: 20px;">
+            <!-- 左侧：在线大模型匹配 -->
+            <div id="onlineMatch" style="flex: 1; padding: 15px; border-left: 4px solid #3498db; background-color: #f8f9fa; border-radius: 4px;"></div>
+            <!-- 右侧：离线算法匹配 -->
+            <div id="offlineMatch" style="flex: 1; padding: 15px; border-left: 4px solid #27ae60; background-color: #f8f9fa; border-radius: 4px;"></div>
+          </div>
+        </div>
+    </main>
+  </div>
+
+  <script src="static/app.js"></script>
+  <script>
+    if (!CareerAid.requireAuth()) throw new Error("not authed");
+    
+    // 加载用户信息
+    CareerAid.apiFetch('/me').then(data => {
+      const s = data.student || {};
+    }).catch(() => {});
+    
+    // 退出登录功能已移除，使用返回按钮返回匹配页面
+
+    const radarDom = document.getElementById("radar");
+    const dualMatchEl = document.getElementById("dualMatch");
+    const onlineMatchEl = document.getElementById("onlineMatch");
+    const offlineMatchEl = document.getElementById("offlineMatch");
+    let radar = null;
+
+    const DIM4 = ["基础要求", "职业技能", "职业素养", "发展潜力"];
+    const DIM10 = ["专业技能", "证书要求", "创新能力", "学习能力", "抗压能力", "沟通能力", "实习能力", "团队协作", "问题解决", "职业稳定性"];
+
+    function initRadar() {
+      if (!radar) {
+        radar = echarts.init(radarDom);
+      }
+    }
+
+    function renderRadar(dim, dim4) {
+      initRadar();
+      
+      const use4 = dim4 && Object.keys(dim4).length >= 2;
+      const keys = use4 ? DIM4 : (dim && Object.keys(dim).length >= 5 ? DIM10.slice(0, 6) : DIM4);
+      const vals = use4
+        ? DIM4.map((k) => Number(dim4[k] != null ? dim4[k] : 50))
+        : keys.map((k) => Number(dim && dim[k] != null ? dim[k] : 50));
+      
+      radar.setOption({
+        backgroundColor: "transparent",
+        tooltip: {},
+        radar: {
+          indicator: keys.map((k) => ({ name: k, max: 100 })),
+          splitArea: { areaStyle: { color: ["#f5f7fa", "#ffffff"] } },
+          axisName: { color: "#000", fontWeight: "bold" },
+          splitLine: { lineStyle: { color: "#000", width: 1 } },
+          axisLine: { lineStyle: { color: "#000", width: 2 } },
+        },
+        series: [
+          {
+            type: "radar",
+            data: [
+              {
+                value: vals,
+                name: "能力评分",
+                areaStyle: { color: "rgba(180, 214, 31, 0.3)" },
+                lineStyle: { color: "#2563eb", width: 3 },
+                itemStyle: { color: "#2563eb" },
+              },
+            ],
+          },
+        ],
+      });
+    }
+
+    function renderDualMatch(match) {
+      const online = match.online_result || {};
+      const offline = match.offline_result || {};
+      
+      // 渲染在线大模型匹配结果
+      let onlineHtml = `
+        <h4 style="margin-top:0; margin-bottom: 10px; color:#2980b9">在线大模型匹配</h4>
+        <div style="font-size:24px;font-weight:bold;margin:10px 0">${online.score || 0}%</div>
+        <div style="font-size:14px;color:#666;margin:10px 0">${online.summary || '在线大模型匹配结果'}</div>
+      `;
+      
+      if (online.dimension_scores) {
+        onlineHtml += `
+          <div style="margin-top:15px">
+            <h5 style="margin:0 0 10px 0;font-size:14px;color:#555">维度得分</h5>
+            <div style="display:flex;flex-wrap:wrap;gap:10px">`;
+        Object.entries(online.dimension_scores).forEach(([k, v]) => {
+          onlineHtml += `<span class="badge">${k}: ${v}%</span>`;
+        });
+        onlineHtml += `</div></div>`;
+      }
+      
+      onlineMatchEl.innerHTML = onlineHtml;
+      
+      // 渲染离线算法匹配结果
+      let offlineHtml = `
+        <h4 style="margin-top:0; margin-bottom: 10px; color:#229954">离线算法匹配</h4>
+        <div style="font-size:24px;font-weight:bold;margin:10px 0">${offline.score || 0}%</div>
+        <div style="font-size:14px;color:#666;margin:10px 0">${offline.summary || '离线算法匹配结果'}</div>
+      `;
+      
+      if (offline.dimension_scores) {
+        offlineHtml += `
+          <div style="margin-top:15px">
+            <h5 style="margin:0 0 10px 0;font-size:14px;color:#555">维度得分</h5>
+            <div style="display:flex;flex-wrap:wrap;gap:10px">`;
+        Object.entries(offline.dimension_scores).forEach(([k, v]) => {
+          offlineHtml += `<span class="badge">${k}: ${v}%</span>`;
+        });
+        offlineHtml += `</div></div>`;
+      }
+      
+      if (offline.ai_enhanced) {
+        offlineHtml += `
+          <div style="margin-top:10px;font-size:12px;color:#27ae60">
+            ✅ 使用了机器学习增强匹配
+          </div>`;
+      }
+      
+      offlineMatchEl.innerHTML = offlineHtml;
+    }
+
+    // 从 localStorage 获取匹配数据
+    function loadMatchData() {
+      const matchDataStr = localStorage.getItem('matchData');
+      
+      if (matchDataStr) {
+        try {
+          const match = JSON.parse(matchDataStr);
+          renderData(match);
+          // 清除 localStorage 中的数据，避免占用空间
+          localStorage.removeItem('matchData');
+        } catch (e) {
+          console.error('解析匹配数据失败:', e);
+          gapEl.textContent = '数据加载失败，请返回重试';
+        }
+      } else {
+        // 使用默认测试数据
+        const defaultMatchData = {
+          job_id: 1,
+          job_title: "Java后端开发工程师",
+          industry: "互联网",
+          salary: "15000-25000",
+          score: 22.6,
+          dimension_scores: {
+            "专业技能": 40,
+            "证书要求": 0,
+            "创新能力": 40,
+            "学习能力": 40,
+            "抗压能力": 40,
+            "沟通能力": 40
+          },
+          dimension_scores_4: {
+            "基础要求": 40,
+            "职业技能": 40,
+            "职业素养": 40,
+            "发展潜力": 40
+          },
+          gap_analysis: {
+            missing_skills: ["Java", "Spring Boot", "MySQL"],
+            suggestions: [
+              "建议学习Java核心技术",
+              "建议学习Spring Boot框架",
+              "建议学习数据库知识"
+            ]
+          },
+          online_result: {
+            score: 0,
+            summary: "在线大模型匹配结果"
+          },
+          offline_result: {
+            score: 22.6,
+            summary: "离线算法匹配结果",
+            dimension_scores: {
+              "基础要求": 40,
+              "职业技能": 40,
+              "职业素养": 40,
+              "发展潜力": 40
+            },
+            ai_enhanced: true
+          }
+        };
+        renderData(defaultMatchData);
+      }
+    }
+
+    // 渲染数据
+    function renderData(match) {
+      // 渲染雷达图
+      renderRadar(match.dimension_scores || {}, match.dimension_scores_4 || {});
+      
+      // 渲染差距分析（美化版本）
+      const gap = match.gap_analysis || {};
+      let gapHtml = '';
+      
+      // 缺失技能
+      if (gap.missing_skills && gap.missing_skills.length > 0) {
+        gapHtml += `
+          <div style="background-color: #fff; border: 2px solid var(--border); border-radius: 8px; padding: 15px; box-shadow: 4px 4px 0px var(--border);">
+            <h5 style="margin-top: 0; margin-bottom: 10px; font-size: 16px; font-weight: 700; color: var(--text);">缺失技能</h5>
+            <ul style="margin: 0; padding-left: 20px;">
+              ${gap.missing_skills.map(skill => `<li style="margin-bottom: 5px;">${skill}</li>`).join('')}
+            </ul>
+          </div>
+        `;
+      }
+      
+      // 建议
+      if (gap.suggestions && gap.suggestions.length > 0) {
+        gapHtml += `
+          <div style="background-color: #fff; border: 2px solid var(--border); border-radius: 8px; padding: 15px; box-shadow: 4px 4px 0px var(--border);">
+            <h5 style="margin-top: 0; margin-bottom: 10px; font-size: 16px; font-weight: 700; color: var(--text);">建议</h5>
+            <ul style="margin: 0; padding-left: 20px;">
+              ${gap.suggestions.map(suggestion => `<li style="margin-bottom: 5px;">${suggestion}</li>`).join('')}
+            </ul>
+          </div>
+        `;
+      }
+      
+      // 如果没有数据，显示提示
+      if (!gapHtml) {
+        gapHtml = `
+          <div style="background-color: #fff; border: 2px solid var(--border); border-radius: 8px; padding: 15px; box-shadow: 4px 4px 0px var(--border);">
+            <p style="margin: 0; color: var(--text-muted);">暂无差距分析数据</p>
+          </div>
+        `;
+      }
+      
+      document.getElementById('gap').innerHTML = gapHtml;
+      
+      // 渲染双线对比
+      renderDualMatch(match);
+    }
+
+    // 页面加载时加载数据
+    window.addEventListener('load', loadMatchData);
+  </script>
+</body>
+</html>

@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="static/favicon.svg" />
+    <title>提升计划 - CareerAid AI</title>
+    <link rel="stylesheet" href="static/style.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- 侧边栏 -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="logo">CareerAid AI</div>
+          <div class="tagline">你的专属AI职业规划助手</div>
+        </div>
+        
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <div class="nav-section-title">核心功能</div>
+            <a class="nav-item" href="upload.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              简历解析
+            </a>
+            <a class="nav-item" href="test.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              性格测评
+            </a>
+            <a class="nav-item" href="match.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              人岗匹配
+            </a>
+            <a class="nav-item" href="report.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              报告生成
+            </a>
+          </div>
+          
+          <div class="nav-section">
+            <div class="nav-section-title">更多</div>
+            <a class="nav-item" href="chat.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              AI对话
+            </a>
+            <a class="nav-item" href="job.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              提升规划
+            </a>
+            <a class="nav-item active" href="plan.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+              提升计划
+            </a>
+          </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+          <div class="user-info" id="userInfo">
+            <div class="user-avatar">U</div>
+            <div class="user-meta">
+              <div class="user-name" id="userName">用户</div>
+              <div class="user-role">学生</div>
+            </div>
+          </div>
+          <button class="btn btn-danger" style="width:100%;margin-top:12px" id="logoutBtn">退出登录</button>
+        </div>
+      </aside>
+
+      <!-- 主内容区 -->
+      <main class="main-content">
+        <header class="topbar">
+          <button class="menu-toggle" id="menuToggle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <h1 class="topbar-title">目标岗位提升计划</h1>
+          <div class="topbar-actions">
+            <span class="badge badge-secondary">个性化学习路径</span>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <!-- 垂直布局 -->
+          <div class="vertical-layout">
+            <!-- 上方：计划概览 -->
+            <div class="card card-featured">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title">计划概览</h2>
+                  <p class="card-subtitle">基于技能差距的个性化提升方案</p>
+                </div>
+                <!-- 简约线条插画 -->
+                <svg width="60" height="60" viewBox="0 0 60 60" class="illustration" style="opacity: 0.9;">
+                  <circle cx="25" cy="25" r="15" stroke="var(--primary)" stroke-width="2" fill="none"/>
+                  <line x1="35" y1="35" x2="50" y2="50" stroke="#000" stroke-width="3"/>
+                  <line x1="32" y1="38" x2="38" y2="32" stroke="#000" stroke-width="2"/>
+                </svg>
+              </div>
+              
+              <div class="form-group">
+                <label>目标岗位</label>
+                <input id="jobTitle" placeholder="例如：Java后端开发工程师" readonly />
+              </div>
+              
+              <div class="form-group">
+                <label>匹配度</label>
+                <input id="matchScore" placeholder="例如：80.5%" readonly />
+              </div>
+              
+              <div class="form-group">
+                <label>学习强度</label>
+                <input id="intensity" placeholder="例如：中等" readonly />
+              </div>
+              
+              <div class="form-group">
+                <label>每周学习时间</label>
+                <input id="weeklyHours" placeholder="例如：8小时" readonly />
+              </div>
+              
+              <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px">
+                <button class="btn btn-primary" id="refreshPlan">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                  刷新计划
+                </button>
+                <a class="btn" href="job.html">返回提升规划</a>
+              </div>
+              
+              <div class="form-hint" id="msg"></div>
+            </div>
+
+            <!-- 下方：详细计划 -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title">详细提升计划</h2>
+                  <p class="card-subtitle">分阶段学习路径与任务</p>
+                </div>
+              </div>
+              
+              <!-- 空状态 -->
+              <div id="emptyState" style="text-align:center;padding:60px 20px">
+                <svg width="140" height="120" viewBox="0 0 140 120" class="illustration" style="margin-bottom:16px;opacity: 0.9;">
+                  <!-- 计划图标 -->
+                  <rect x="30" y="40" width="80" height="60" stroke="var(--primary)" stroke-width="2" fill="var(--primary-light)"/>
+                  <!-- 计划线条 -->
+                  <line x1="40" y1="55" x2="100" y2="55" stroke="#000" stroke-width="2"/>
+                  <line x1="40" y1="70" x2="100" y2="70" stroke="#000" stroke-width="2"/>
+                  <line x1="40" y1="85" x2="100" y2="85" stroke="#000" stroke-width="2"/>
+                  <line x1="40" y1="100" x2="100" y2="100" stroke="#000" stroke-width="2"/>
+                  <!-- 时间标记 -->
+                  <circle cx="30" cy="55" r="5" fill="var(--primary)" stroke="#000" stroke-width="1"/>
+                  <circle cx="30" cy="100" r="5" fill="var(--primary)" stroke="#000" stroke-width="1"/>
+                  <!-- 装饰元素 -->
+                  <circle cx="120" cy="30" r="8" fill="var(--primary)" stroke="#000" stroke-width="2"/>
+                  <text x="116" y="34" font-family="sans-serif" font-size="10" font-weight="bold" fill="#000">AI</text>
+                </svg>
+                <div style="color:var(--text-muted);font-size:14px">选择岗位后将显示详细提升计划</div>
+              </div>
+              
+              <div id="planContent" style="display:none">
+                <!-- 缺失技能 -->
+                <div class="card card-accent">
+                  <div style="font-weight:700;margin-bottom:8px">缺失技能</div>
+                  <div id="missingSkills" class="mono" style="white-space:pre-wrap;word-break:break-word;margin:0;font-size:13px"></div>
+                </div>
+                
+                <div class="hr"></div>
+                
+                <!-- 短期计划 -->
+                <div class="card">
+                  <div style="font-weight:700;margin-bottom:8px">短期计划</div>
+                  <div id="shortTermPlan"></div>
+                </div>
+                
+                <div class="hr"></div>
+                
+                <!-- 中期计划 -->
+                <div class="card">
+                  <div style="font-weight:700;margin-bottom:8px">中期计划</div>
+                  <div id="midTermPlan"></div>
+                </div>
+                
+                <div class="hr"></div>
+                
+                <!-- 作品集建议 -->
+                <div class="card">
+                  <div style="font-weight:700;margin-bottom:8px">作品集建议</div>
+                  <div id="projects"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="static/app.js"></script>
+    <script>
+      // 加载用户信息
+      const token = CareerAid.getToken();
+      if (token) {
+        CareerAid.apiFetch('/me').then(data => {
+          const s = data.student || {};
+          document.getElementById('userName').textContent = s.username || '用户';
+          document.querySelector('.user-avatar').textContent = (s.username || 'U')[0].toUpperCase();
+        }).catch(() => {});
+      } else {
+        document.getElementById('userInfo').style.display = 'none';
+        document.getElementById('logoutBtn').textContent = '去登录';
+        document.getElementById('logoutBtn').className = 'btn btn-primary';
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+          window.location.href = 'login.html';
+        });
+      }
+      
+      // 退出登录
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        if (token) {
+          CareerAid.logout();
+        }
+      });
+      
+      // 移动端菜单
+      document.getElementById('menuToggle').addEventListener('click', () => {
+        document.querySelector('.sidebar').classList.toggle('open');
+      });
+
+      const msg = CareerAid.qs("msg");
+      const emptyState = document.getElementById('emptyState');
+      const planContent = document.getElementById('planContent');
+      const jobTitle = document.getElementById('jobTitle');
+      const matchScore = document.getElementById('matchScore');
+      const intensity = document.getElementById('intensity');
+      const weeklyHours = document.getElementById('weeklyHours');
+      const missingSkills = document.getElementById('missingSkills');
+      const shortTermPlan = document.getElementById('shortTermPlan');
+      const midTermPlan = document.getElementById('midTermPlan');
+      const projects = document.getElementById('projects');
+      
+      // 获取URL参数
+      function getUrlParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+      }
+
+      // 渲染计划内容
+      function renderPlan(data) {
+        const job = data.job || {};
+        const match = data.match || {};
+        const plan = data.plan || {};
+        
+        // 填充概览信息
+        jobTitle.value = job.title || "未知岗位";
+        matchScore.value = match.score != null ? match.score + "%" : "—";
+        intensity.value = plan.intensity || "—";
+        weeklyHours.value = plan.weekly_hours != null ? plan.weekly_hours + "小时" : "—";
+        
+        // 填充缺失技能
+        const gap = (match.gap_analysis || {});
+        const miss = (gap.missing_skills || []);
+        if (miss.length > 0) {
+          missingSkills.textContent = miss.join('\n');
+        } else {
+          missingSkills.textContent = "暂无缺失技能";
+        }
+        
+        // 填充短期计划
+        const shortTerm = plan.short_term || {};
+        let shortTermHtml = `
+          <div style="margin-bottom:12px">
+            <strong>持续时间：</strong>${shortTerm.duration || "—"}
+          </div>
+          <div style="margin-bottom:12px">
+            <strong>目标：</strong>
+            <ul style="margin-top:4px">
+              ${(shortTerm.goals || []).map(goal => `<li>${goal}</li>`).join('')}
+            </ul>
+          </div>
+          <div style="margin-bottom:12px">
+            <strong>任务：</strong>
+            <ul style="margin-top:4px">
+              ${(shortTerm.tasks || []).map(task => `
+                <li>
+                  <strong>${task.task}</strong>
+                  <ul style="margin-top:4px;margin-left:20px">
+                    ${(task.items || []).map(item => `<li>${item}</li>`).join('')}
+                  </ul>
+                  <div style="margin-top:4px;font-style:italic;font-size:13px">
+                    产出：${task.output || "—"}
+                  </div>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+          <div>
+            <strong>衡量指标：</strong>
+            <ul style="margin-top:4px">
+              ${(shortTerm.metrics || []).map(metric => `<li>${metric}</li>`).join('')}
+            </ul>
+          </div>
+        `;
+        shortTermPlan.innerHTML = shortTermHtml;
+        
+        // 填充中期计划
+        const midTerm = plan.mid_term || {};
+        let midTermHtml = `
+          <div style="margin-bottom:12px">
+            <strong>持续时间：</strong>${midTerm.duration || "—"}
+          </div>
+          <div style="margin-bottom:12px">
+            <strong>目标：</strong>
+            <ul style="margin-top:4px">
+              ${(midTerm.goals || []).map(goal => `<li>${goal}</li>`).join('')}
+            </ul>
+          </div>
+          <div style="margin-bottom:12px">
+            <strong>任务：</strong>
+            <ul style="margin-top:4px">
+              ${(midTerm.tasks || []).map(task => `
+                <li>
+                  <strong>${task.task}</strong>
+                  <ul style="margin-top:4px;margin-left:20px">
+                    ${(task.items || []).map(item => `<li>${item}</li>`).join('')}
+                  </ul>
+                  <div style="margin-top:4px;font-style:italic;font-size:13px">
+                    产出：${task.output || "—"}
+                  </div>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+          <div>
+            <strong>衡量指标：</strong>
+            <ul style="margin-top:4px">
+              ${(midTerm.metrics || []).map(metric => `<li>${metric}</li>`).join('')}
+            </ul>
+          </div>
+        `;
+        midTermPlan.innerHTML = midTermHtml;
+        
+        // 填充作品集建议
+        const projectList = plan.projects || [];
+        let projectsHtml = projectList.map(project => `
+          <div style="margin-bottom:12px;padding:12px;border:1px solid #e2e8f0;border-radius:6px">
+            <div style="font-weight:600;margin-bottom:4px">${project.name}</div>
+            <div style="font-size:13px;color:var(--text-muted)">
+              <strong>交付物：</strong>${project.deliverables ? project.deliverables.join('、') : "—"}
+            </div>
+          </div>
+        `).join('');
+        if (projectsHtml) {
+          projects.innerHTML = projectsHtml;
+        } else {
+          projects.innerHTML = "暂无作品集建议";
+        }
+        
+        // 显示计划内容
+        emptyState.style.display = 'none';
+        planContent.style.display = 'block';
+      }
+
+      // 加载提升计划
+      async function loadPlan() {
+        const jobId = getUrlParam('job_id');
+        if (!jobId) {
+          msg.textContent = "缺少岗位ID参数";
+          return;
+        }
+        
+        msg.textContent = "加载中...";
+        try {
+          const data = await CareerAid.apiFetch("/plan_for_target_job", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ job_id: Number(jobId), weekly_hours: 8, prefer_internship: true }),
+          });
+          msg.textContent = "";
+          renderPlan(data);
+        } catch (e) {
+          msg.textContent = "加载失败：" + (e.message || String(e));
+        }
+      }
+
+      // 刷新计划
+      document.getElementById('refreshPlan').addEventListener('click', loadPlan);
+      
+      // 初始加载
+      loadPlan();
+    </script>
+  </body>
+</html>

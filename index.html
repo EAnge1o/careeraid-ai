@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="static/favicon.svg" />
+    <title>智业AI职业规划助手</title>
+    <link rel="stylesheet" href="static/style.css" />
+    <style>
+      /* 首页独立样式 - 无侧边栏 */
+      .landing-page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .landing-header {
+        background: #ffffff;
+        border-bottom: var(--border-width-thick) solid var(--border);
+        padding: 16px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .landing-logo {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--text);
+      }
+      
+      .landing-tagline {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-left: 8px;
+      }
+      
+      .landing-nav {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
+      
+      .landing-main {
+        flex: 1;
+        padding: 48px 32px;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+      }
+      
+      .landing-hero {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 64px;
+        align-items: center;
+        margin-bottom: 80px;
+      }
+      
+      @media (max-width: 900px) {
+        .landing-hero {
+          grid-template-columns: 1fr;
+          gap: 48px;
+        }
+      }
+      
+      .landing-hero-content h1 {
+        font-size: 48px;
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 24px;
+        color: var(--text);
+      }
+      
+      @media (max-width: 600px) {
+        .landing-hero-content h1 {
+          font-size: 32px;
+        }
+      }
+      
+      .landing-hero-content p {
+        font-size: 18px;
+        color: var(--text-muted);
+        line-height: 1.7;
+        margin-bottom: 32px;
+      }
+      
+      .landing-hero-actions {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      
+      .landing-hero-visual {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .landing-features {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 32px;
+      }
+      
+      @media (max-width: 900px) {
+        .landing-features {
+          grid-template-columns: 1fr;
+        }
+      }
+      
+      .landing-footer {
+        background: #ffffff;
+        border-top: var(--border-width-thick) solid var(--border);
+        padding: 24px 32px;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="landing-page">
+      <!-- 顶部导航 -->
+      <header class="landing-header">
+        <div>
+          <span class="landing-logo">CareerAid AI</span>
+          <span class="landing-tagline">你的专属AI职业规划助手</span>
+        </div>
+        <div class="landing-nav">
+          <a href="login.html" class="btn btn-primary">立即登录</a>
+        </div>
+      </header>
+
+      <!-- 主内容 -->
+      <main class="landing-main">
+        <!-- Hero 区域 -->
+        <section class="landing-hero">
+          <div class="landing-hero-content">
+            <div style="margin-bottom: 16px;">
+              <span class="badge badge-primary" style="background-color: #2563eb; border-color: #2563eb;">Career Planning</span>
+              <span class="badge badge-secondary">大学生专属</span>
+            </div>
+            
+            <h1>智业AI职业规划助手</h1>
+            <p>简历解析 · 性格测评 · 人岗匹配 · 报告生成<br>AI 助力大学生精准职业规划</p>
+            
+            <div class="landing-hero-actions">
+              <a class="btn btn-lg btn-primary" href="login.html">立即开始</a>
+              <a class="btn btn-lg" href="login.html">了解更多</a>
+            </div>
+            
+
+          </div>
+          
+          <div class="landing-hero-visual">
+            <div class="hero-card-visual" style="width: 100%; max-width: 400px;">
+              <div class="card-header-bar">
+                <div class="card-dot red"></div>
+                <div class="card-dot yellow"></div>
+                <div class="card-dot green"></div>
+              </div>
+              <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:16px; padding: 32px;">
+                <!-- 独特插画 - 职业阶梯与AI -->
+                <svg width="220" height="180" viewBox="0 0 220 180" class="illustration" style="opacity: 0.9;">
+                  <!-- 背景网格 -->
+                  <defs>
+                    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--primary-light)" stroke-width="1"/>
+                    </pattern>
+                  </defs>
+                  <rect width="220" height="180" fill="url(#grid)"/>
+                  
+                  <!-- 职业阶梯 - 统一主色调 -->
+                  <rect x="20" y="140" width="40" height="30" fill="var(--primary)" stroke="#000" stroke-width="2"/>
+                  <rect x="70" y="110" width="40" height="60" fill="var(--primary)" stroke="#000" stroke-width="2"/>
+                  <rect x="120" y="70" width="40" height="100" fill="var(--primary)" stroke="#000" stroke-width="2"/>
+                  <rect x="170" y="30" width="40" height="140" fill="var(--primary)" stroke="#000" stroke-width="2"/>
+                  
+                  <!-- 阶梯上的节点 -->
+                  <circle cx="40" cy="125" r="8" fill="#fff" stroke="#000" stroke-width="2"/>
+                  <circle cx="90" cy="95" r="8" fill="#fff" stroke="#000" stroke-width="2"/>
+                  <circle cx="140" cy="55" r="8" fill="#fff" stroke="#000" stroke-width="2"/>
+                  <circle cx="190" cy="15" r="10" fill="var(--primary)" stroke="#000" stroke-width="2"/>
+                  
+                  <!-- 上升路径 -->
+                  <polyline points="40,125 90,95 140,55 190,15" stroke="#000" stroke-width="3" fill="none" stroke-linecap="round"/>
+                  
+                  <!-- AI机器人 -->
+                  <rect x="160" y="100" width="50" height="60" rx="8" fill="var(--primary-light)" stroke="#000" stroke-width="2"/>
+                  <rect x="170" y="110" width="30" height="20" fill="#fff" stroke="#000" stroke-width="1"/>
+                  <circle cx="178" cy="120" r="3" fill="var(--primary)"/>
+                  <circle cx="192" cy="120" r="3" fill="var(--primary)"/>
+                  <rect x="175" y="140" width="20" height="3" fill="#000"/>
+                  <rect x="175" y="148" width="20" height="3" fill="#000"/>
+                  <!-- 天线 -->
+                  <line x1="185" y1="100" x2="185" y2="85" stroke="#000" stroke-width="2"/>
+                  <circle cx="185" cy="80" r="5" fill="var(--primary)" stroke="#000" stroke-width="2"/>
+                  
+                  <!-- 星星/目标 -->
+                  <polygon points="190,15 192,21 198,21 193,25 195,31 190,27 185,31 187,25 182,21 188,21" 
+                           fill="var(--primary)" stroke="#000" stroke-width="1"/>
+                  
+                  <!-- 装饰元素 - 数据点 -->
+                  <circle cx="30" cy="40" r="4" fill="var(--primary)" stroke="#000" stroke-width="1"/>
+                  <circle cx="60" cy="25" r="3" fill="var(--primary)" stroke="#000" stroke-width="1"/>
+                  <circle cx="130" cy="35" r="5" fill="var(--primary)" stroke="#000" stroke-width="1"/>
+                </svg>
+                <div style="text-align:center">
+                  <div style="font-size:14px;font-weight:800;color:var(--text)">智能职业规划</div>
+                  <div style="font-size:12px;color:var(--text-muted);margin-top:4px;font-weight:600">AI 驱动 · 精准匹配</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 功能卡片 -->
+        <section>
+          <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 32px; text-align: center;">核心功能</h2>
+          <div class="landing-features">
+            <div class="card card-featured">
+              <div class="card-header" style="border-bottom:none;padding-bottom:0;margin-bottom:16px">
+                <h3 class="card-title">简历解析</h3>
+              </div>
+              <p class="text-muted" style="font-size:14px;line-height:1.6">智能解析简历内容，提取关键技能、经历和证书，构建个人能力画像。</p>
+              <a href="login.html" class="btn btn-primary" style="margin-top:20px;width:100%">开始解析</a>
+            </div>
+            
+            <div class="card card-featured">
+              <div class="card-header" style="border-bottom:none;padding-bottom:0;margin-bottom:16px">
+                <h3 class="card-title">性格测评</h3>
+              </div>
+              <p class="text-muted" style="font-size:14px;line-height:1.6">基于大五人格理论，科学评估性格特质，发现适合的职业方向。</p>
+              <a href="login.html" class="btn btn-primary" style="margin-top:20px;width:100%">开始测评</a>
+            </div>
+            
+            <div class="card card-featured">
+              <div class="card-header" style="border-bottom:none;padding-bottom:0;margin-bottom:16px">
+                <h3 class="card-title">人岗匹配</h3>
+              </div>
+              <p class="text-muted" style="font-size:14px;line-height:1.6">AI 算法精准匹配岗位，多维度分析匹配度，提供雷达图可视化。</p>
+              <a href="login.html" class="btn btn-primary" style="margin-top:20px;width:100%">查看匹配</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- 底部 -->
+      <footer class="landing-footer">
+        <p>CareerAid AI · 你的专属AI职业规划助手 · 让 AI 助力你的职业发展</p>
+      </footer>
+    </div>
+
+    <script src="static/app.js"></script>
+    <script>
+      // 如果已登录，跳转到聊天页面
+      const token = CareerAid.getToken();
+      if (token) {
+        window.location.href = 'chat.html';
+      }
+    </script>
+  </body>
+</html>

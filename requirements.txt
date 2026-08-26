@@ -1,0 +1,23 @@
+# 基础运行依赖（pip install -r requirements.txt）
+# 说明：
+#   - OCR 图片识别为可选能力，见 requirements-ocr.txt
+#   - 人岗匹配模型训练为可选能力，见 requirements-ml.txt
+
+# Web 框架依赖
+Flask>=3.0.0
+Flask-Cors>=4.0.0
+Flask-SQLAlchemy>=3.1.0
+SQLAlchemy>=2.0.0
+python-dotenv>=1.0.0
+
+# 文档处理依赖
+pdfplumber>=0.11.0
+reportlab>=4.0.0
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+openpyxl>=3.1.0
+xlrd>=2.0.0
+python-docx>=1.1.0
+
+# 图像处理依赖（简历图片解析）
+Pillow>=10.0.0

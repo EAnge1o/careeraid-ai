@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="static/favicon.svg" />
+    <title>报告生成 - CareerAid AI</title>
+    <link rel="stylesheet" href="static/style.css" />
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- 侧边栏 -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="logo">CareerAid AI</div>
+          <div class="tagline">你的专属AI职业规划助手</div>
+        </div>
+        
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <div class="nav-section-title">核心功能</div>
+            <a class="nav-item" href="upload.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              简历解析
+            </a>
+            <a class="nav-item" href="test.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              性格测评
+            </a>
+            <a class="nav-item" href="match.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              人岗匹配
+            </a>
+            <a class="nav-item active" href="report.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              报告生成
+            </a>
+          </div>
+          
+          <div class="nav-section">
+            <div class="nav-section-title">更多</div>
+            <a class="nav-item" href="chat.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              AI对话
+            </a>
+            <a class="nav-item" href="job.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              提升规划
+            </a>
+            <a class="nav-item" href="admin.html" id="adminLink" style="display: none;">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              管理员后台
+            </a>
+          </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+          <div class="user-info" id="userInfo">
+            <div class="user-avatar">U</div>
+            <div class="user-meta">
+              <div class="user-name" id="userName">用户</div>
+              <div class="user-role">学生</div>
+            </div>
+          </div>
+          <button class="btn btn-danger" style="width:100%;margin-top:12px" id="logoutBtn">退出登录</button>
+        </div>
+      </aside>
+
+      <!-- 主内容区 -->
+      <main class="main-content">
+        <header class="topbar">
+          <button class="menu-toggle" id="menuToggle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <h1 class="topbar-title">报告生成</h1>
+          <div class="topbar-actions">
+            <span class="badge badge-secondary">一键生成</span>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <!-- 生成设置 -->
+          <div class="card card-featured" style="margin-bottom:32px">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">生成设置</h2>
+                <p class="card-subtitle">个性化职业规划报告</p>
+              </div>
+              <!-- 简约线条插画 -->
+              <svg width="60" height="60" viewBox="0 0 60 60" class="illustration" style="opacity: 0.9;">
+                <rect x="10" y="8" width="40" height="44" stroke="var(--primary)" stroke-width="2" fill="var(--primary-light)"/>
+                <line x1="18" y1="20" x2="42" y2="20" stroke="#000" stroke-width="2"/>
+                <line x1="18" y1="28" x2="42" y2="28" stroke="#000" stroke-width="2"/>
+                <line x1="18" y1="36" x2="38" y2="36" stroke="#000" stroke-width="2"/>
+                <polygon points="45,52 50,42 40,42" fill="var(--primary)" stroke="#000" stroke-width="1"/>
+              </svg>
+            </div>
+            
+            <div class="form-group">
+              <label>你的目标（可选）</label>
+              <input id="goal" placeholder="例如：希望进入互联网数据分析，偏北京/上海" />
+            </div>
+            
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px">
+              <button class="btn btn-primary" id="gen">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                一键生成报告
+              </button>
+              <a class="btn" href="match.html">先看匹配结果</a>
+            </div>
+            
+            <div class="form-hint" id="msg"></div>
+            
+            <div id="downloadWrap" style="display:none;margin-top:20px">
+              <div class="hr"></div>
+              <div style="font-weight:700;margin-bottom:12px">下载报告</div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <a class="btn btn-primary" id="download" href="#" target="_blank" rel="noreferrer">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  下载 TXT
+                </a>
+                <a class="btn" id="downloadDocx" href="#" target="_blank" rel="noreferrer">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  下载 Word
+                </a>
+                <a class="btn" id="downloadPdf" href="#" target="_blank" rel="noreferrer">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                  下载 PDF
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 报告内容 -->
+          <div class="card" style="margin-bottom:32px">
+            <div class="card-header">
+              <div style="display:flex;justify-content:space-between;align-items:center;width:100%">
+                <div>
+                  <h2 class="card-title">生成的报告</h2>
+                  <p class="card-subtitle">可编辑的职业规划报告内容</p>
+                </div>
+                <div style="display:flex;gap:8px">
+                  <button class="btn btn-sm" id="editBtn" style="display:none">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    编辑
+                  </button>
+                  <button class="btn btn-sm" id="saveBtn" style="display:none">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    保存
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-hint">生成后会保存到数据库；支持内容完整性检查、手动编辑后复制导出。</div>
+            <div id="completeness" class="form-hint" style="margin-top:6px"></div>
+            <div class="hr"></div>
+            
+            <!-- 空状态 -->
+            <div id="emptyState" style="text-align:center;padding:60px 20px">
+              <svg width="140" height="120" viewBox="0 0 140 120" class="illustration" style="margin-bottom:16px;opacity: 0.9;">
+                <!-- 报告文档 -->
+                <rect x="30" y="10" width="80" height="100" stroke="var(--primary)" stroke-width="2" fill="var(--primary-light)"/>
+                <line x1="45" y1="30" x2="95" y2="30" stroke="#000" stroke-width="2"/>
+                <line x1="45" y1="45" x2="95" y2="45" stroke="#000" stroke-width="2"/>
+                <line x1="45" y1="60" x2="95" y2="60" stroke="#000" stroke-width="2"/>
+                <line x1="45" y1="75" x2="80" y2="75" stroke="#000" stroke-width="2"/>
+                <!-- 印章/徽章 -->
+                <circle cx="100" cy="85" r="15" stroke="#000" stroke-width="2" fill="#fff"/>
+                <line x1="92" y1="85" x2="108" y2="85" stroke="var(--primary)" stroke-width="2"/>
+                <line x1="100" y1="77" x2="100" y2="93" stroke="var(--primary)" stroke-width="2"/>
+              </svg>
+              <div style="color:var(--text-muted);font-size:14px">点击"一键生成报告"开始生成</div>
+            </div>
+            
+            <!-- 可编辑报告区域 -->
+            <textarea id="reportContent" style="width:100%;min-height:400px;padding:20px;border:3px solid var(--border);border-radius:var(--radius-md);background:#ffffff;font-family:monospace;font-size:14px;line-height:1.7;display:none"></textarea>
+            <pre class="mono" id="out" style="white-space:pre-wrap;word-break:break-word;margin:0;min-height:400px;display:none;font-size:14px;line-height:1.7"></pre>
+          </div>
+
+          <!-- 历史报告 -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title">历史报告</h2>
+                <p class="card-subtitle">之前生成的报告，可随时再次下载（TXT / Word / PDF）</p>
+              </div>
+            </div>
+            <div id="historyList" class="form-hint">加载中...</div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="static/app.js"></script>
+    <script>
+      if (!CareerAid.requireAuth()) throw new Error("not authed");
+      
+      // 加载用户信息
+      CareerAid.apiFetch('/me').then(data => {
+        const s = data.student || {};
+        document.getElementById('userName').textContent = s.username || '用户';
+        document.querySelector('.user-avatar').textContent = (s.username || 'U')[0].toUpperCase();
+        
+        // 显示管理员后台链接
+        if (s.username === 'admin') {
+          document.getElementById('adminLink').style.display = 'block';
+        }
+      }).catch(() => {});
+      
+      // 退出登录
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        CareerAid.logout();
+      });
+      
+      // 移动端菜单
+      document.getElementById('menuToggle').addEventListener('click', () => {
+        document.querySelector('.sidebar').classList.toggle('open');
+      });
+
+      const msg = CareerAid.qs("msg");
+      const out = CareerAid.qs("out");
+      const reportContent = document.getElementById("reportContent");
+      const downloadWrap = document.getElementById("downloadWrap");
+      const download = document.getElementById("download");
+      const downloadDocx = document.getElementById("downloadDocx");
+      const downloadPdf = document.getElementById("downloadPdf");
+      const completenessEl = document.getElementById("completeness");
+      const emptyState = document.getElementById("emptyState");
+      const editBtn = document.getElementById("editBtn");
+      const saveBtn = document.getElementById("saveBtn");
+
+      // 编辑模式
+      editBtn.addEventListener("click", () => {
+        reportContent.value = out.textContent;
+        out.style.display = 'none';
+        reportContent.style.display = 'block';
+        editBtn.style.display = 'none';
+        saveBtn.style.display = 'inline-flex';
+      });
+
+      // 保存模式
+      saveBtn.addEventListener("click", async () => {
+        msg.textContent = "保存中...";
+        try {
+          // 从下载链接中提取报告ID
+          const downloadUrl = download.getAttribute("href");
+          const reportId = downloadUrl ? downloadUrl.split("/")[2] : null;
+          
+          if (reportId) {
+            // 调用更新报告API
+            await CareerAid.apiFetch(`/reports/${reportId}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ content: reportContent.value })
+            });
+          }
+          
+          out.textContent = reportContent.value;
+          reportContent.style.display = 'none';
+          out.style.display = 'block';
+          saveBtn.style.display = 'none';
+          editBtn.style.display = 'inline-flex';
+          msg.textContent = "报告已更新。";
+        } catch (e) {
+          msg.textContent = "保存失败：" + (e.message || String(e));
+        }
+      });
+
+      // 下载 TXT
+      download.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const url = download.getAttribute("href");
+        const token = CareerAid.getToken();
+        console.log('Download URL:', url);
+        console.log('Token:', token);
+        if (url) {
+          try {
+            const response = await fetch(url, {
+              headers: {
+                "Authorization": "Bearer " + token
+              }
+            });
+            if (response.ok) {
+              const blob = await response.blob();
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "career_report.txt";
+              document.body.appendChild(a);
+              a.click();
+              window.URL.revokeObjectURL(url);
+              document.body.removeChild(a);
+            } else {
+              const errorText = await response.text();
+              console.log('Download error:', errorText);
+              throw new Error("下载失败: " + errorText);
+            }
+          } catch (e) {
+            msg.textContent = "下载失败：" + (e.message || String(e));
+          }
+        }
+      });
+
+      // 下载 Word
+      downloadDocx.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const url = downloadDocx.getAttribute("href");
+        const token = CareerAid.getToken();
+        console.log('Download Docx URL:', url);
+        console.log('Token:', token);
+        if (url) {
+          try {
+            const response = await fetch(url, {
+              headers: {
+                "Authorization": "Bearer " + token
+              }
+            });
+            if (response.ok) {
+              const blob = await response.blob();
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "career_report.docx";
+              document.body.appendChild(a);
+              a.click();
+              window.URL.revokeObjectURL(url);
+              document.body.removeChild(a);
+            } else {
+              const errorText = await response.text();
+              console.log('Download error:', errorText);
+              throw new Error("下载失败: " + errorText);
+            }
+          } catch (e) {
+            msg.textContent = "下载失败：" + (e.message || String(e));
+          }
+        }
+      });
+
+      // 下载 PDF
+      downloadPdf.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const url = downloadPdf.getAttribute("href");
+        const token = CareerAid.getToken();
+        console.log('Download PDF URL:', url);
+        console.log('Token:', token);
+        if (url) {
+          try {
+            const response = await fetch(url, {
+              headers: {
+                "Authorization": "Bearer " + token
+              }
+            });
+            if (response.ok) {
+              const blob = await response.blob();
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "career_report.pdf";
+              document.body.appendChild(a);
+              a.click();
+              window.URL.revokeObjectURL(url);
+              document.body.removeChild(a);
+            } else {
+              const errorText = await response.text();
+              console.log('Download error:', errorText);
+              throw new Error("下载失败: " + errorText);
+            }
+          } catch (e) {
+            msg.textContent = "下载失败：" + (e.message || String(e));
+          }
+        }
+      });
+
+      document.getElementById("gen").addEventListener("click", async () => {
+        msg.textContent = "生成中...";
+        out.textContent = "";
+        reportContent.value = "";
+        out.style.display = 'none';
+        reportContent.style.display = 'none';
+        emptyState.style.display = 'block';
+        downloadWrap.style.display = "none";
+        completenessEl.textContent = "";
+        editBtn.style.display = 'none';
+        saveBtn.style.display = 'none';
+        try {
+          const goal = CareerAid.qs("goal").value.trim();
+          const data = await CareerAid.apiFetch("/generate_report", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ goal }),
+          });
+          msg.textContent = "已生成。";
+          loadHistory();
+          emptyState.style.display = 'none';
+          out.style.display = 'block';
+          out.textContent = data.content || "";
+          reportContent.value = data.content || "";
+          editBtn.style.display = 'inline-flex';
+          saveBtn.style.display = 'none';
+          if (data.download_url) {
+        download.href = data.download_url;
+        downloadWrap.style.display = "block";
+      }
+      if (data.download_docx_url) {
+        downloadDocx.href = data.download_docx_url;
+        downloadWrap.style.display = "block";
+      }
+      if (data.download_pdf_url) {
+        downloadPdf.href = data.download_pdf_url;
+        downloadWrap.style.display = "block";
+      }
+          const check = data.completeness_check || {};
+          if (check.complete) {
+            completenessEl.textContent = "完整性检查：通过。";
+            completenessEl.style.color = "#2563eb";
+          } else if (check.missing_sections && check.missing_sections.length) {
+            completenessEl.textContent = "完整性检查：缺失 " + check.missing_sections.join("、") + "。建议补充后重新生成。";
+            completenessEl.style.color = "#f59e0b";
+          }
+        } catch (e) {
+          msg.textContent = "失败：" + (e.message || String(e));
+        }
+      });
+
+      // 历史报告列表
+      async function loadHistory() {
+        const box = document.getElementById("historyList");
+        try {
+          const data = await CareerAid.apiFetch("/reports");
+          const rows = (data && data.reports) || [];
+          if (!rows.length) {
+            box.textContent = "暂无历史报告，生成后将自动出现在这里。";
+            return;
+          }
+          box.innerHTML = rows.map(r => `
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 0;border-bottom:1px solid var(--border)">
+              <div style="flex:1;min-width:200px">
+                <div style="font-weight:600">#${r.id} · ${new Date(r.created_at).toLocaleString()}</div>
+                <div style="color:var(--text-muted);font-size:13px;margin-top:2px">${r.preview}</div>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <a class="btn btn-sm" href="${r.download_url}" target="_blank" rel="noreferrer">TXT</a>
+                <a class="btn btn-sm" href="${r.download_docx_url}" target="_blank" rel="noreferrer">Word</a>
+                <a class="btn btn-sm" href="${r.download_pdf_url}" target="_blank" rel="noreferrer">PDF</a>
+              </div>
+            </div>`).join("");
+        } catch (e) {
+          box.textContent = "加载历史报告失败：" + (e.message || String(e));
+        }
+      }
+      loadHistory();
+    </script>
+  </body>
+</html>

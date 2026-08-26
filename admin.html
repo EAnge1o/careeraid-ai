@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="static/favicon.svg" />
+    <title>管理员后台 - CareerAid AI</title>
+    <link rel="stylesheet" href="static/style.css" />
+    <script src="static/echarts.min.js"></script>
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- 侧边栏 -->
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <div class="logo">CareerAid AI</div>
+          <div class="tagline">你的专属AI职业规划助手</div>
+        </div>
+        
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <div class="nav-section-title">核心功能</div>
+            <a class="nav-item" href="upload.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              简历解析
+            </a>
+            <a class="nav-item" href="test.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              性格测评
+            </a>
+            <a class="nav-item" href="match.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              人岗匹配
+            </a>
+            <a class="nav-item" href="report.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              报告生成
+            </a>
+          </div>
+          
+          <div class="nav-section">
+            <div class="nav-section-title">更多</div>
+            <a class="nav-item" href="chat.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              AI对话
+            </a>
+            <a class="nav-item" href="job.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              提升规划
+            </a>
+            <a class="nav-item active" href="admin.html">
+              <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              管理员后台
+            </a>
+          </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+          <div class="user-info" id="userInfo">
+            <div class="user-avatar">A</div>
+            <div class="user-meta">
+              <div class="user-name" id="userName">admin</div>
+              <div class="user-role">管理员</div>
+            </div>
+          </div>
+          <button class="btn" style="width:100%;margin-top:12px" id="changePwdBtn">修改密码</button>
+          <button class="btn btn-danger" style="width:100%;margin-top:12px" id="logoutBtn">退出登录</button>
+        </div>
+      </aside>
+
+      <!-- 主内容区 -->
+      <main class="main-content">
+        <header class="topbar">
+          <button class="menu-toggle" id="menuToggle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <h1 class="topbar-title">管理员后台</h1>
+          <div class="topbar-actions">
+            <span class="badge badge-primary">管理模式</span>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <!-- 导航标签 -->
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="dashboard">仪表盘</button>
+            <button class="tab-btn" data-tab="users">用户管理</button>
+            <button class="tab-btn" data-tab="jobs">岗位管理</button>
+            <button class="tab-btn" data-tab="stats">统计分析</button>
+          </div>
+
+          <!-- 仪表盘 -->
+          <div id="dashboard" class="tab-content active">
+            <div class="grid" style="grid-template-columns: 2fr 1fr; gap: 20px;">
+              <div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">系统概览</h2>
+                  <p class="card-subtitle">核心业务指标</p>
+                </div>
+                <div class="card-body">
+                  <div class="grid" style="grid-template-columns: 1fr; gap: 16px;">
+                    <!-- 统计卡片 -->
+                    <div class="stat-card" onclick="switchTab('users')" style="display: flex; justify-content: space-between; align-items: center;">
+                      <div style="display: flex; align-items: center; gap: 16px;">
+                        <div class="stat-icon">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <div class="stat-label" style="font-size: 18px; font-weight: 700; color: var(--text);">注册用户</div>
+                      </div>
+                      <div class="stat-value" id="userCount" style="font-size: 32px; font-weight: 700; color: var(--primary);">--</div>
+                    </div>
+
+                    <div class="stat-card" onclick="switchTab('jobs')" style="display: flex; justify-content: space-between; align-items: center;">
+                      <div style="display: flex; align-items: center; gap: 16px;">
+                        <div class="stat-icon">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                        </div>
+                        <div class="stat-label" style="font-size: 18px; font-weight: 700; color: var(--text);">岗位数量</div>
+                      </div>
+                      <div class="stat-value" id="jobCount" style="font-size: 32px; font-weight: 700; color: var(--primary);">--</div>
+                    </div>
+
+                    <div class="stat-card" onclick="switchTab('stats')" style="display: flex; justify-content: space-between; align-items: center;">
+                      <div style="display: flex; align-items: center; gap: 16px;">
+                        <div class="stat-icon">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        </div>
+                        <div class="stat-label" style="font-size: 18px; font-weight: 700; color: var(--text);">匹配次数</div>
+                      </div>
+                      <div class="stat-value" id="matchCount" style="font-size: 32px; font-weight: 700; color: var(--primary);">--</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">管理员信息</h2>
+                  <p class="card-subtitle">当前登录管理员</p>
+                </div>
+                <div class="card-body">
+                  <div class="user-info" id="adminInfoCard">
+                    <div class="user-avatar">A</div>
+                    <div class="user-meta">
+                      <div class="user-name" id="adminName">admin</div>
+                      <div class="user-role">管理员</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 用户管理 -->
+          <div id="users" class="tab-content">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">用户管理</h2>
+                <p class="card-subtitle">管理所有系统用户</p>
+              </div>
+              <div class="card-body">
+                <div class="table-container">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>用户名</th>
+                        <th>昵称</th>
+                        <th>专业</th>
+                        <th>注册时间</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                      <!-- 动态生成用户列表 -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 岗位管理 -->
+          <div id="jobs" class="tab-content">
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">岗位管理</h2>
+                <p class="card-subtitle">管理所有招聘岗位</p>
+                <div>
+                  <button class="btn btn-primary" onclick="addJob()">添加岗位</button>
+                  <button class="btn btn-danger" onclick="deleteSelectedJobs()">删除选中</button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="table-container">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th><input type="checkbox" id="selectAllJobs" onclick="toggleSelectAll()"></th>
+                        <th>ID</th>
+                        <th>岗位名称</th>
+                        <th>薪资范围</th>
+                      </tr>
+                    </thead>
+                    <tbody id="jobTableBody">
+                      <!-- 动态生成岗位列表 -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 统计分析 -->
+          <div id="stats" class="tab-content">
+            <div class="grid">
+              <div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">岗位热度排行</h2>
+                  <p class="card-subtitle">分析热门岗位趋势</p>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                  <div id="jobHeatChart" style="width: 100%; height: 400px;"></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header">
+                  <h2 class="card-title">技能缺口分析</h2>
+                  <p class="card-subtitle">识别市场需求与供给差距</p>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                  <div id="skillGapChart" style="width: 100%; height: 400px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- 用户匹配详情模态框 -->
+    <div id="userMatchModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>用户匹配详情</h3>
+          <button class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="modalUserInfo"></div>
+          <h4>匹配结果</h4>
+          <div class="table-container">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>岗位名称</th>
+                  <th>匹配分数</th>
+                  <th>匹配时间</th>
+                </tr>
+              </thead>
+              <tbody id="matchTableBody">
+                <!-- 匹配数据将通过 JavaScript 动态填充 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 添加岗位模态框 -->
+    <div id="addJobModal" class="modal">
+      <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+          <h3>添加新岗位</h3>
+          <button class="close-btn" onclick="closeAddJobModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>岗位名称</label>
+            <input type="text" id="jobTitle" placeholder="请输入岗位名称">
+          </div>
+          <div class="form-group">
+            <label>薪资范围</label>
+            <input type="text" id="jobSalary" placeholder="例如：8k-15k">
+          </div>
+          <div class="form-actions">
+            <button class="btn" onclick="closeAddJobModal()">取消</button>
+            <button class="btn btn-primary" onclick="saveJob()">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 修改密码模态框 -->
+    <div id="changePwdModal" class="modal">
+      <div class="modal-content" style="max-width: 440px;">
+        <div class="modal-header">
+          <h3>修改密码</h3>
+          <button class="close-btn" onclick="closeChangePwdModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>原密码</label>
+            <input type="password" id="oldPassword" placeholder="请输入原密码" autocomplete="current-password">
+          </div>
+          <div class="form-group">
+            <label>新密码</label>
+            <input type="password" id="newPassword" placeholder="至少 6 位" autocomplete="new-password">
+          </div>
+          <div class="form-group">
+            <label>确认新密码</label>
+            <input type="password" id="confirmPassword" placeholder="再次输入新密码" autocomplete="new-password">
+          </div>
+          <div id="changePwdMsg" class="form-hint" style="color:#dc2626"></div>
+          <div class="form-actions">
+            <button class="btn" onclick="closeChangePwdModal()">取消</button>
+            <button class="btn btn-primary" onclick="submitChangePwd()">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="static/app.js"></script>
+    <script>
+      // 检查管理员权限
+      async function checkAdminAuth() {
+        try {
+          const data = await CareerAid.apiFetch('/me');
+          const user = data.student;
+          
+          // 检查是否为管理员（用户名是 admin）
+          if (user.username !== 'admin') {
+            alert('您没有管理员权限');
+            window.location.href = 'upload.html';
+            return false;
+          }
+          
+          // 更新管理员信息
+          document.getElementById('adminName').textContent = 'admin';
+          
+          return true;
+        } catch (error) {
+          console.error('检查权限失败:', error);
+          window.location.href = 'login.html';
+          return false;
+        }
+      }
+
+      // 标签切换
+      function switchTab(tabName) {
+        // 隐藏所有标签内容
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.remove('active');
+        });
+        
+        // 移除所有按钮的active状态
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.classList.remove('active');
+        });
+        
+        // 显示选中的标签内容
+        document.getElementById(tabName).classList.add('active');
+        
+        // 激活对应的按钮
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        
+        // 如果切换到统计分析标签，加载图表
+        if (tabName === 'stats') {
+          setTimeout(() => {
+            loadStatsCharts();
+          }, 100);
+        }
+      }
+
+      // 绑定标签按钮点击事件
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          switchTab(btn.dataset.tab);
+        });
+      });
+
+      // 加载统计数据
+      async function loadStats() {
+        try {
+          const data = await CareerAid.apiFetch('/admin/stats');
+          
+          document.getElementById('userCount').textContent = data.user_count;
+          document.getElementById('jobCount').textContent = data.job_count;
+          document.getElementById('matchCount').textContent = data.match_count;
+        } catch (error) {
+          console.error('加载统计数据失败:', error);
+        }
+      }
+
+      // 加载用户列表
+      async function loadUsers() {
+        try {
+          const data = await CareerAid.apiFetch('/admin/users');
+          const tbody = document.getElementById('userTableBody');
+          tbody.innerHTML = '';
+          
+          data.users.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${user.id}</td>
+              <td>${user.username}</td>
+              <td>${user.name || '-'}</td>
+              <td>${user.major || '-'}</td>
+              <td>${new Date(user.created_at).toLocaleDateString()}</td>
+              <td>
+                <button class="btn btn-sm btn-primary" onclick="viewUserMatches(${user.id})">查看匹配</button>
+              </td>
+            `;
+            tbody.appendChild(row);
+          });
+        } catch (error) {
+          console.error('加载用户列表失败:', error);
+        }
+      }
+
+      // 加载岗位列表
+      async function loadJobs() {
+        try {
+          const data = await CareerAid.apiFetch('/jobs');
+          const tbody = document.getElementById('jobTableBody');
+          tbody.innerHTML = '';
+          
+          data.jobs.forEach(job => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td><input type="checkbox" class="job-checkbox" data-job-id="${job.id}"></td>
+              <td>${job.id}</td>
+              <td>${job.title}</td>
+              <td>${job.salary || '-'}</td>
+            `;
+            tbody.appendChild(row);
+          });
+        } catch (error) {
+          console.error('加载岗位列表失败:', error);
+        }
+      }
+
+      // 全选/取消全选
+      function toggleSelectAll() {
+        const selectAllCheckbox = document.getElementById('selectAllJobs');
+        const checkboxes = document.querySelectorAll('.job-checkbox');
+        checkboxes.forEach(checkbox => {
+          checkbox.checked = selectAllCheckbox.checked;
+        });
+      }
+
+      // 删除选中的岗位
+      async function deleteSelectedJobs() {
+        const checkboxes = document.querySelectorAll('.job-checkbox:checked');
+        if (checkboxes.length === 0) {
+          alert('请先选择要删除的岗位');
+          return;
+        }
+
+        if (!confirm(`确定要删除选中的 ${checkboxes.length} 个岗位吗？`)) {
+          return;
+        }
+
+        const jobIds = Array.from(checkboxes).map(cb => cb.dataset.jobId);
+        
+        try {
+          for (const jobId of jobIds) {
+            await CareerAid.apiFetch(`/admin/jobs/${jobId}`, {
+              method: 'DELETE'
+            });
+          }
+          alert('删除成功');
+          loadJobs();
+        } catch (error) {
+          console.error('删除岗位失败:', error);
+          alert('删除失败');
+        }
+      }
+
+      // 打开添加岗位模态框
+      function addJob() {
+        document.getElementById('addJobModal').style.display = 'block';
+      }
+
+      // 关闭添加岗位模态框
+      function closeAddJobModal() {
+        document.getElementById('addJobModal').style.display = 'none';
+        document.getElementById('jobTitle').value = '';
+        document.getElementById('jobSalary').value = '';
+      }
+
+      // 保存新岗位
+      async function saveJob() {
+        const title = document.getElementById('jobTitle').value.trim();
+        const salary = document.getElementById('jobSalary').value.trim();
+
+        if (!title) {
+          alert('请输入岗位名称');
+          return;
+        }
+
+        try {
+          await CareerAid.apiFetch('/admin/jobs', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ title, salary })
+          });
+          alert('添加成功');
+          closeAddJobModal();
+          loadJobs();
+        } catch (error) {
+          console.error('添加岗位失败:', error);
+          alert('添加失败');
+        }
+      }
+
+      // 加载统计图表
+      let chartsLoaded = false;
+      async function loadStatsCharts() {
+        if (chartsLoaded) return;
+        
+        try {
+          const data = await CareerAid.apiFetch('/admin/stats');
+          
+          const jobHeatContainer = document.getElementById('jobHeatChart');
+          const skillGapContainer = document.getElementById('skillGapChart');
+          
+          // 强制设置容器宽度为父容器的100%
+          jobHeatContainer.style.width = '100%';
+          skillGapContainer.style.width = '100%';
+          
+          // 触发重排
+          jobHeatContainer.offsetHeight;
+          skillGapContainer.offsetHeight;
+          
+          // 岗位热度图表 - 新粗野风格
+          const jobHeatChart = echarts.init(jobHeatContainer);
+          const jobHeatOption = {
+            backgroundColor: 'transparent',
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: { type: 'shadow' },
+              backgroundColor: '#2563eb',
+              borderColor: '#000',
+              borderWidth: 3,
+              textStyle: { color: '#000', fontWeight: 700 },
+              padding: [12, 16],
+              borderRadius: 8,
+              formatter: function(params) {
+                return `<strong>${params[0].name}</strong><br/>匹配次数: ${params[0].value}`;
+              }
+            },
+            grid: {
+              left: '3%',
+              right: '4%',
+              bottom: '15%',
+              top: '10%',
+              containLabel: true
+            },
+            xAxis: {
+              type: 'category',
+              data: data.hot_jobs.map(job => job.job_title),
+              axisLabel: {
+                rotate: 45,
+                color: '#000',
+                fontSize: 12,
+                fontWeight: 600
+              },
+              axisLine: {
+                lineStyle: {
+                  color: '#000',
+                  width: 3
+                }
+              },
+              axisTick: {
+                show: true,
+                lineStyle: { color: '#000', width: 2 }
+              }
+            },
+            yAxis: {
+              type: 'value',
+              name: '匹配次数',
+              nameTextStyle: {
+                color: '#000',
+                fontSize: 13,
+                fontWeight: 700
+              },
+              axisLabel: {
+                color: '#000',
+                fontSize: 12,
+                fontWeight: 600
+              },
+              axisLine: {
+                show: true,
+                lineStyle: { color: '#000', width: 3 }
+              },
+              axisTick: {
+                show: true,
+                lineStyle: { color: '#000', width: 2 }
+              },
+              splitLine: {
+                lineStyle: {
+                  color: 'rgba(0,0,0,0.15)',
+                  type: 'dashed',
+                  width: 2
+                }
+              }
+            },
+            series: [
+              {
+                data: data.hot_jobs.map(job => job.match_count),
+                type: 'bar',
+                barWidth: '60%',
+                itemStyle: {
+                  color: '#2563eb',
+                  borderColor: '#000',
+                  borderWidth: 3,
+                  borderRadius: [8, 8, 0, 0]
+                },
+                emphasis: {
+                  itemStyle: {
+                    color: '#7a9b15'
+                  },
+                  scale: true,
+                  focus: 'series'
+                },
+                animationDuration: 1000,
+                animationEasing: 'elasticOut'
+              }
+            ]
+          };
+          jobHeatChart.setOption(jobHeatOption);
+          jobHeatChart.resize();
+          
+          // 技能缺口图表 - 新粗野风格
+          const skillGapChart = echarts.init(skillGapContainer);
+          const skillGapOption = {
+            backgroundColor: 'transparent',
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: { type: 'shadow' },
+              backgroundColor: '#eef4ff',
+              borderColor: '#000',
+              borderWidth: 3,
+              textStyle: { color: '#000', fontWeight: 700 },
+              padding: [12, 16],
+              borderRadius: 8,
+              formatter: function(params) {
+                return `<strong>${params[0].name}</strong><br/>缺口次数: ${params[0].value}`;
+              }
+            },
+            grid: {
+              left: '3%',
+              right: '4%',
+              bottom: '15%',
+              top: '10%',
+              containLabel: true
+            },
+            xAxis: {
+              type: 'category',
+              data: data.skill_gaps.map(item => item.skill),
+              axisLabel: {
+                rotate: 45,
+                color: '#000',
+                fontSize: 12,
+                fontWeight: 600
+              },
+              axisLine: {
+                lineStyle: {
+                  color: '#000',
+                  width: 3
+                }
+              },
+              axisTick: {
+                show: true,
+                lineStyle: { color: '#000', width: 2 }
+              }
+            },
+            yAxis: {
+              type: 'value',
+              name: '缺口次数',
+              nameTextStyle: {
+                color: '#000',
+                fontSize: 13,
+                fontWeight: 700
+              },
+              axisLabel: {
+                color: '#000',
+                fontSize: 12,
+                fontWeight: 600
+              },
+              axisLine: {
+                show: true,
+                lineStyle: { color: '#000', width: 3 }
+              },
+              axisTick: {
+                show: true,
+                lineStyle: { color: '#000', width: 2 }
+              },
+              splitLine: {
+                lineStyle: {
+                  color: 'rgba(0,0,0,0.15)',
+                  type: 'dashed',
+                  width: 2
+                }
+              }
+            },
+            series: [
+              {
+                data: data.skill_gaps.map(item => item.gap_count),
+                type: 'bar',
+                barWidth: '60%',
+                itemStyle: {
+                  color: '#eef4ff',
+                  borderColor: '#000',
+                  borderWidth: 3,
+                  borderRadius: [8, 8, 0, 0]
+                },
+                emphasis: {
+                  itemStyle: {
+                    color: '#c5e0a0'
+                  },
+                  scale: true,
+                  focus: 'series'
+                },
+                animationDuration: 1000,
+                animationEasing: 'elasticOut'
+              }
+            ]
+          };
+          skillGapChart.setOption(skillGapOption);
+          skillGapChart.resize();
+          
+          // 响应式调整
+          window.addEventListener('resize', () => {
+            jobHeatChart.resize();
+            skillGapChart.resize();
+          });
+          
+          chartsLoaded = true;
+        } catch (error) {
+          console.error('加载统计图表失败:', error);
+        }
+      }
+
+      // 查看用户匹配详情
+      async function viewUserMatches(userId) {
+        try {
+          const data = await CareerAid.apiFetch(`/admin/user/${userId}/matches`);
+          
+          // 填充用户信息
+          const userInfo = document.getElementById('modalUserInfo');
+          userInfo.innerHTML = `
+            <h4>${data.user.username} (${data.user.name || '无昵称'})</h4>
+            <p>专业: ${data.user.major || '未设置'}</p>
+            <p>注册时间: ${data.user.created_at}</p>
+          `;
+          
+          // 填充匹配结果
+          const tbody = document.getElementById('matchTableBody');
+          tbody.innerHTML = '';
+          
+          if (data.matches.length === 0) {
+            const row = document.createElement('tr');
+            row.innerHTML = '<td colspan="3" style="text-align: center;">暂无匹配记录</td>';
+            tbody.appendChild(row);
+          } else {
+            data.matches.forEach(match => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${match.job_title}</td>
+                <td>${match.score.toFixed(2)}</td>
+                <td>${match.created_at}</td>
+              `;
+              tbody.appendChild(row);
+            });
+          }
+          
+          // 显示模态框
+          document.getElementById('userMatchModal').style.display = 'block';
+        } catch (error) {
+          console.error('查看用户匹配详情失败:', error);
+        }
+      }
+
+      // 修改密码
+      function closeChangePwdModal() {
+        document.getElementById('changePwdModal').style.display = 'none';
+        document.getElementById('changePwdMsg').textContent = '';
+      }
+
+      async function submitChangePwd() {
+        const oldPw = document.getElementById('oldPassword').value.trim();
+        const newPw = document.getElementById('newPassword').value.trim();
+        const confirmPw = document.getElementById('confirmPassword').value.trim();
+        const msgEl = document.getElementById('changePwdMsg');
+
+        if (!oldPw || !newPw) { msgEl.textContent = '请填写原密码和新密码'; return; }
+        if (newPw.length < 6) { msgEl.textContent = '新密码长度至少为 6 位'; return; }
+        if (newPw !== confirmPw) { msgEl.textContent = '两次输入的新密码不一致'; return; }
+
+        try {
+          const data = await CareerAid.apiFetch('/change_password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ old_password: oldPw, new_password: newPw })
+          });
+          if (data.ok) {
+            alert('密码修改成功，请重新登录');
+            closeChangePwdModal();
+            CareerAid.logout();
+          }
+        } catch (e) {
+          msgEl.textContent = e.message || String(e);
+        }
+      }
+
+      // 退出登录 + 修改密码入口
+      document.getElementById('logoutBtn').addEventListener('click', () => CareerAid.logout());
+      document.getElementById('changePwdBtn').addEventListener('click', () => {
+        document.getElementById('changePwdModal').style.display = 'block';
+      });
+
+      // 关闭模态框
+      document.querySelectorAll('.close-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.getElementById('userMatchModal').style.display = 'none';
+        });
+      });
+
+      // 点击模态框外部关闭
+      window.addEventListener('click', (e) => {
+        const userMatchModal = document.getElementById('userMatchModal');
+        if (e.target === userMatchModal) {
+          userMatchModal.style.display = 'none';
+        }
+      });
+
+      // 初始化
+      document.addEventListener('DOMContentLoaded', async () => {
+        if (!await checkAdminAuth()) return;
+        
+        loadStats();
+        loadUsers();
+        loadJobs();
+      });
+    </script>
+  </body>
+</html>
