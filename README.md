@@ -3,6 +3,19 @@
 > 一个基于 AI 的大学生职业规划 Web 应用：**简历解析 → 能力画像 → 人岗匹配 → 职业发展报告 → 提升计划** 全流程闭环。
 > 后端 Flask + SQLite，前端原生 HTML/CSS/JS（无框架），AI 能力采用"大模型优先 + 离线规则兜底"的双引擎设计，未配置任何 API Key 也能完整运行。
 
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://python.org)
+[![Flask](https://img.shields.io/badge/Flask-3.x-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com)
+[![SQLite](https://img.shields.io/badge/SQLite-local-003B57?logo=sqlite&logoColor=white)](https://sqlite.org)
+[![Frontend](https://img.shields.io/badge/HTML%2FCSS%2FJS-native-E34F26?logo=html5&logoColor=white)](#)
+[![Docs](https://img.shields.io/badge/docs-ALGORITHM%20%26%20PROMPTS-brightgreen)](docs/ALGORITHM.md)
+
+## 🏆 竞赛答辩定位
+
+- **不是 Demo**：登录、简历解析、人岗匹配、报告导出、管理员后台形成可运行的完整业务闭环。
+- **算法可解释**：四维加权匹配 + 技能 Jaccard 重合度 + 可选 RandomForest 回归增强，详细推导见 [docs/ALGORITHM.md](docs/ALGORITHM.md)。
+- **工程可降级**：大模型不可用时自动切换离线规则引擎，保证演示现场不因 API Key 或网络问题翻车。
+- **开箱可展示**：数据库首次启动自动建表并写入 12 个演示岗位，无需手动导入即可走通全流程。
+
 ## ✨ 功能亮点
 
 | 模块 | 说明 |
@@ -51,12 +64,21 @@ python app.py
 
 ## 📸 界面预览
 
-<!-- TODO: 在此处放置截图，例如：
-![首页](screenshots/home.png)
-![人岗匹配](screenshots/match.png)
-![报告导出](screenshots/report.png)
-![管理员后台](screenshots/admin.png)
--->
+建议启动服务后截取以下四个核心页面，保存到 `docs/screenshots/`，再替换为真实图片链接：
+
+| 页面 | 建议截图内容 |
+|---|---|
+| 首页 | 能力画像雷达图与推荐岗位入口 |
+| 人岗匹配 | 四维匹配得分、技能重合度与差距分析 |
+| 报告导出 | 职业发展报告在线编辑页或 PDF 导出结果 |
+| 管理员后台 | 用户 / 岗位管理与统计图表 |
+
+```markdown
+![首页](docs/screenshots/home.png)
+![人岗匹配](docs/screenshots/match.png)
+![报告导出](docs/screenshots/report.png)
+![管理员后台](docs/screenshots/admin.png)
+```
 
 ## 📁 项目结构
 
