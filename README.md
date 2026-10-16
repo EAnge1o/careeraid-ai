@@ -9,7 +9,7 @@
 [![Frontend](https://img.shields.io/badge/HTML%2FCSS%2FJS-native-E34F26?logo=html5&logoColor=white)](#)
 [![Docs](https://img.shields.io/badge/docs-ALGORITHM%20%26%20PROMPTS-brightgreen)](docs/ALGORITHM.md)
 
-## 🏆 竞赛答辩定位
+## 🎯 项目定位
 
 - **不是 Demo**：登录、简历解析、人岗匹配、报告导出、管理员后台形成可运行的完整业务闭环。
 - **算法可解释**：四维加权匹配 + 技能 Jaccard 重合度 + 可选 RandomForest 回归增强，详细推导见 [docs/ALGORITHM.md](docs/ALGORITHM.md)。
@@ -41,8 +41,8 @@
 环境要求：Python 3.10+
 
 ```bash
-git clone <你的仓库地址>
-cd <项目目录>
+git clone https://github.com/EAnge1o/careeraid-ai.git
+cd careeraid-ai
 python -m venv .venv
 
 # Windows
